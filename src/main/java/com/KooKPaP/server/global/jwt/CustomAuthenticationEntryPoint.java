@@ -1,5 +1,8 @@
 package com.KooKPaP.server.global.jwt;
 
+import com.KooKPaP.server.global.common.dto.ApplicationErrorResponse;
+import com.KooKPaP.server.global.common.exception.ErrorCode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
@@ -14,8 +17,26 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         authException.getCause().printStackTrace();
 
+        Object exception = request.getAttribute("exception");
+
+        if (exception instanceof ErrorCode) {
+            ErrorCode errorCode = (ErrorCode) exception;
+            setResponse(response,errorCode);
+
+            return;
+        }
+
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+    }
+
+    private void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException{
         response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(authException.getMessage());
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        ApplicationErrorResponse errorResponse = new ApplicationErrorResponse(errorCode);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String errorJson = objectMapper.writeValueAsString(errorResponse);
+
+        response.getWriter().write(errorJson);
     }
 }

@@ -9,7 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-    // 자격 관련 에러 처리, 403
+    // 인가 관련 에러 처리, 403
+    // 나중에 API 설계 완료되면 해당 클래스 커스텀할 예정
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         accessDeniedException.getCause().printStackTrace();

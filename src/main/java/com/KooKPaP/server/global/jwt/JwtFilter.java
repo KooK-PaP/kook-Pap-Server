@@ -1,5 +1,6 @@
 package com.KooKPaP.server.global.jwt;
 
+import com.KooKPaP.server.global.common.exception.CustomException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -27,13 +28,17 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        // Request Header에서 JWT 토큰 꺼내기
-        String jwt = resolveToken(request);
+        try {
+            // Request Header에서 JWT 토큰 꺼내기
+            String jwt = resolveToken(request);
 
-        // 유효성검사
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            // 유효성검사
+            if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+                Authentication authentication = tokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (CustomException e) {
+            request.setAttribute("exception", e.getErrorCode());
         }
 
         filterChain.doFilter(request,response);
