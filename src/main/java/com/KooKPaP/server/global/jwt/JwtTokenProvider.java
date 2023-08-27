@@ -2,9 +2,12 @@ package com.KooKPaP.server.global.jwt;
 
 import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
+import com.KooKPaP.server.global.common.exception.CustomException;
+import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.jwt.tokenDto.JwtTokenDto;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -63,9 +66,8 @@ public class JwtTokenProvider {
         // Authentication 객체 만들기
         Long memberId = JWT.require(Algorithm.HMAC256(key)).build().verify(accessToken).getClaim("id").asLong();
 
-        // 예외처리 수정 필수
         Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new RuntimeException("사용자가 존재하지 않습니다.")
+                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
         );
 
         PrincipalDetails principalDetails = new PrincipalDetails(member);
@@ -82,14 +84,14 @@ public class JwtTokenProvider {
         try {
             JWT.require(Algorithm.HMAC256(key)).build().verify(token);
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            throw new AuthenticationServiceException("잘못된 JWT 서명입니다.",e);
-        } catch (ExpiredJwtException e) {
-            throw new AuthenticationServiceException("만료된 JWT 토큰입니다.",e);
-        } catch (UnsupportedJwtException e) {
-            throw new AuthenticationServiceException("지원되지 않는 JWT 토큰입니다.",e);
-        }catch (IllegalArgumentException e){
-            throw new AuthenticationServiceException("JWT 토큰이 잘못되었습니다.",e);
+        } catch (SignatureVerificationException e) {
+            throw new CustomException(ErrorCode.JWT_INVALID_TOKEN);
+        } catch (TokenExpiredException e) {
+            throw new CustomException(ErrorCode.JWT_EXPIRED_TOKEN);
+        } catch (AlgorithmMismatchException | JWTDecodeException e) {
+            throw new CustomException(ErrorCode.JWT_UNSUPPORTED_TOKEN);
+        } catch (JWTVerificationException e) {
+            throw new CustomException(ErrorCode.JWT_WRONG_TOKEN);
         }
     }
 }
