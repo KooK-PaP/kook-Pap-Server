@@ -74,7 +74,8 @@ public class SecurityConfig {
         corsConfiguration.setAllowCredentials(true);
 
         // 브라우저가 접근 가능한 헤더 설정
-        corsConfiguration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Headers", "Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +
+        corsConfiguration.setExposedHeaders(Arrays.asList("Access-Control-Allow-Headers",
+                "Authorization, x-xsrf-token, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, " +
                 "Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

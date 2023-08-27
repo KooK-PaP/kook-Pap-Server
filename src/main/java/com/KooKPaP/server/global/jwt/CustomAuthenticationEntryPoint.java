@@ -9,8 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    // 인증 관련 에러 처리, 401
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        // 추후 추가예정
+        authException.getCause().printStackTrace();
+
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(authException.getMessage());
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
