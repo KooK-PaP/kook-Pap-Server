@@ -25,5 +25,4 @@ public class ApplicationResponse<T> {
 
         return applicationResponse;
     }
-
 }
