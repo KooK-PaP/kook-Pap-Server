@@ -2,6 +2,7 @@ package com.KooKPaP.server.global.common.dto;
 
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import lombok.*;
+import org.springframework.http.ResponseEntity;
 
 @Getter
 @Setter
@@ -14,15 +15,14 @@ public class ApplicationResponse<T> {
     private int code;
     private T object;
 
+    public ApplicationResponse(ErrorCode errorCode, T object) {
+        this.status = errorCode.getHttpStatus().value();
+        this.message = errorCode.getMessage();
+        this.code = errorCode.getCode();
+        this.object = object;
+    }
 
     public static <T> ApplicationResponse<T> ok(ErrorCode errorCode, T object) {
-        ApplicationResponse<T> applicationResponse = new ApplicationResponse<>();
-
-        applicationResponse.setStatus(errorCode.getHttpStatus().value());
-        applicationResponse.setMessage(errorCode.getMessage());
-        applicationResponse.setCode(errorCode.getCode());
-        applicationResponse.setObject(object);
-
-        return applicationResponse;
+        return  new ApplicationResponse<>(errorCode,object);
     }
 }
