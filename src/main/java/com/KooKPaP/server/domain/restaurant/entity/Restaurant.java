@@ -31,8 +31,8 @@ public class Restaurant extends BaseTimeEntity {
     @Column(name = "time", columnDefinition = "text")
     private String time;
 
-    @Column(name = "call", nullable = false)
-    private String call;
+    @Column(name = "call_number", nullable = false)
+    private String callNumber;
 
     @Column(name = "introduction", nullable = false, columnDefinition = "text")
     private String introduction;
