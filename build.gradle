@@ -45,6 +45,9 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// Swagger UI - spring doc
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
 }
 
 tasks.named('test') {
