@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "Member")
+@Table(name = "Restaurant")
 @SQLDelete(sql = "UPDATE restaurant SET deleted_at = NOW() where id = ?") // SQL Delete 쿼리 시, 논리적 삭제로 바인딩되도록 하기 위한 용도
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 무분별한 생성자 사용을 막는 용도
 public class Restaurant extends BaseTimeEntity {
