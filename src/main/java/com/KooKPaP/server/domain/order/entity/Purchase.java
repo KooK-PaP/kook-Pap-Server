@@ -10,10 +10,11 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Table(name = "Order")
+@Table(name = "purchase")
 @SQLDelete(sql = "UPDATE menu SET deleted_at = NOW() where id = ?") // SQL Delete 쿼리 시, 논리적 삭제로 바인딩되도록 하기 위한 용도
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 무분별한 생성자 사용을 막는 용도
-public class Order {
+public class Purchase {
+    // 음식 주문 내용에 해당하는 엔티티
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, columnDefinition = "bigint")
@@ -21,19 +22,19 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bucket_id")
-    private Bucket bucket;
+    private Bucket bucket;      // bucket은 장바구니의 역할을 수행
 
     @Column(name = "name", nullable = false)
-    private String name;
+    private String name;        // 주문 음식 이름
 
     @Column(name = "price", nullable = false)
-    private Integer price;
+    private Integer price;      // 주문 음식 가격
 
     @Column(name = "count", nullable = false)
-    private Integer count;
+    private Integer count;      // 주문 음식 수량
 
     @Builder
-    public Order(Long id, Bucket bucket, String name, Integer price, Integer count) {
+    public Purchase(Long id, Bucket bucket, String name, Integer price, Integer count) {
         this.id = id;
         this.bucket = bucket;
         this.name = name;

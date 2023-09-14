@@ -26,20 +26,20 @@ public class Restaurant extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Column(name = "location", nullable = false)
-    private String location;
+    @Column(name = "address", nullable = false)
+    private String address;     // 가게 주소
 
     @Column(name = "call_number", nullable = false)
-    private String callNumber;
+    private String callNumber;      // 가게 전화번호
 
     @Column(name = "introduction", nullable = false, columnDefinition = "text")
-    private String introduction;
+    private String introduction;        // 가게 설명
 
     @Builder
-    public Restaurant(Long id, Member member, String location, String callNumber, String introduction) {
+    public Restaurant(Long id, Member member, String address, String callNumber, String introduction) {
         this.id = id;
         this.member = member;
-        this.location = location;
+        this.address = address;
         this.callNumber = callNumber;
         this.introduction = introduction;
     }

@@ -24,25 +24,25 @@ public class Bucket extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member member;          // 누가 주문했는지
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
+    private Restaurant restaurant;      // 어떤 가게에 주문을 했는지
 
     @Column(name = "state", nullable = false)
     @Enumerated(EnumType.STRING)
-    private OrderState state;
+    private BucketState state;          // 주문 상태 (처리 됐는지 안됐는지.. 등등)
 
     @Column(name = "total_price", nullable = false)
-    private Integer price;
+    private Integer totalPrice;         // 주문 총 금액
 
     @Builder
-    public Bucket(Long id, Member member, Restaurant restaurant, OrderState state, Integer price) {
+    public Bucket(Long id, Member member, Restaurant restaurant, BucketState state, Integer totalPrice) {
         this.id = id;
         this.member = member;
         this.restaurant = restaurant;
         this.state = state;
-        this.price = price;
+        this.totalPrice = totalPrice;
     }
 }

@@ -15,6 +15,7 @@ import javax.persistence.*;
 @SQLDelete(sql = "UPDATE restaurant SET deleted_at = NOW() where id = ?") // SQL Delete 쿼리 시, 논리적 삭제로 바인딩되도록 하기 위한 용도
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // 무분별한 생성자 사용을 막는 용도
 public class Operation extends BaseTimeEntity {
+    // 가게가 영업을 시작하는 시간과 영업 종료하는 시간.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, columnDefinition = "bigint")
