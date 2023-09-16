@@ -3,13 +3,16 @@ package com.KooKPaP.server.domain.member.controller;
 import com.KooKPaP.server.domain.member.dto.request.GeneralLoginReqDto;
 import com.KooKPaP.server.domain.member.dto.request.SignupReqDto;
 import com.KooKPaP.server.domain.member.dto.request.VerifyAuthCodeReqDto;
+import com.KooKPaP.server.domain.member.service.CommonAuthService;
 import com.KooKPaP.server.domain.member.service.GeneralAuthService;
 import com.KooKPaP.server.domain.member.service.KakaoAuthService;
 import com.KooKPaP.server.global.common.dto.ApplicationResponse;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
+import com.KooKPaP.server.global.jwt.PrincipalDetails;
 import com.KooKPaP.server.global.jwt.tokenDto.JwtTokenDto;
 import com.KooKPaP.server.global.social.OauthToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +24,7 @@ import java.util.Map;
 public class AuthController {
     private final GeneralAuthService generalAuthService;
     private final KakaoAuthService kakaoAuthService;
+    private final CommonAuthService commonAuthService;
 
     @PostMapping("/email")
     public ApplicationResponse<String> verifyEmail(@RequestBody Map<String, String> verifyEmailReq) {
@@ -56,6 +60,20 @@ public class AuthController {
     public ApplicationResponse<JwtTokenDto> kakaoLogin(@RequestParam("code") String code) {
         OauthToken oauthToken = kakaoAuthService.getKakaoAccessToken(code);
         JwtTokenDto jwtTokenDto = kakaoAuthService.saveUserAndGetToken(oauthToken);
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
+    }
+
+    @PostMapping("/logout")
+    public ApplicationResponse<String> logout(@AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody JwtTokenDto jwtTokenDto) {
+        commonAuthService.deprecateTokens(jwtTokenDto);
+        kakaoAuthService.serviceLogout(principalDetails);
+
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "로그아웃 되었습니다.");
+    }
+
+    @PostMapping("/reissue")
+    public ApplicationResponse<JwtTokenDto> reissue(@RequestBody Map<String, String> request) {
+        JwtTokenDto jwtTokenDto = commonAuthService.reissue(request.get("refreshToken"));
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
     }
 }

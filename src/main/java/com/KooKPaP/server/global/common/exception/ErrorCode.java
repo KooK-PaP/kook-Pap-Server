@@ -26,6 +26,9 @@ public enum ErrorCode {
     AUTH_EXPIRED_KAKAO_ACCESS_TOKEN(HttpStatus.BAD_REQUEST, "카카오 엑세스 토큰이 만료되었습니다.", 2012),
     AUTH_EXPIRED_OAUTH_TOKEN(HttpStatus.BAD_REQUEST, "카카오로부터 정보를 받아올 수 없습니다. 다시 로그인해주세요.", 2013),
     AUTH_KAKAO_SERVER_ERROR(HttpStatus.BAD_GATEWAY, "카카오 서버가 일시적 내부 장애상태 입니다", 2014),
+    AUTH_DEPRECATED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "만료된 Refresh 토큰입니다.", 2015),
+    AUTH_DEPRECATED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "더 이상 사용되지 않는 Access 토큰입니다", 2016),
+    AUTH_USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 사용자를 찾을 수 없습니다.", 2017),
 
     // Member 관련 (3000번대)
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.", 3001),
