@@ -17,7 +17,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     // 인증 관련 에러 처리, 401
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        authException.getCause().printStackTrace();
 
         Object exception = request.getAttribute("exception");
 

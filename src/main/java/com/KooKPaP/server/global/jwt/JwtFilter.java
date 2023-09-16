@@ -2,6 +2,7 @@ package com.KooKPaP.server.global.jwt;
 
 import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
+import com.KooKPaP.server.global.common.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +20,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -29,6 +31,13 @@ public class JwtFilter extends OncePerRequestFilter {
 
             // 유효성검사
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+                // Black List에 올라와 있는지 검사.
+                if("Deprecated".equals(redisService.getValue(jwt))){
+                    request.setAttribute("exception", ErrorCode.AUTH_DEPRECATED_ACCESS_TOKEN);
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }else request.setAttribute("exception", ErrorCode.JWT_ABSENCE_TOKEN);
