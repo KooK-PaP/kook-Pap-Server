@@ -18,8 +18,6 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-    public static final String HeaderString = "Authorization";
-    public static final String TOKEN_PREFIX = "Bearer ";
     private final JwtTokenProvider tokenProvider;
 
     @Override
@@ -42,10 +40,10 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     private String resolveToken(HttpServletRequest request) {
-        String token = request.getHeader(HeaderString);
+        String token = request.getHeader(JwtAttribute.HeaderString);
 
-        if (StringUtils.hasText(token) && token.startsWith(TOKEN_PREFIX)) {
-            return token.replace(TOKEN_PREFIX, "");
+        if (StringUtils.hasText(token) && token.startsWith(JwtAttribute.TOKEN_PREFIX)) {
+            return token.replace(JwtAttribute.TOKEN_PREFIX, "");
         }
         return null;
     }

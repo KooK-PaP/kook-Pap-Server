@@ -26,6 +26,9 @@ public class Restaurant extends BaseTimeEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(name = "name", nullable = false)
+    private String name;        // 가게 이름
+
     @Column(name = "address", nullable = false)
     private String address;     // 가게 주소
 

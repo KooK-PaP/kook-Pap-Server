@@ -33,7 +33,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     private void setResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException{
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setStatus(errorCode.getHttpStatus().value());
 
         ApplicationErrorResponse errorResponse = new ApplicationErrorResponse(errorCode);
         ObjectMapper objectMapper = new ObjectMapper();
