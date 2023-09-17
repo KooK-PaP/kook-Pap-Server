@@ -86,7 +86,7 @@ public class GeneralAuthService {
 
         JwtTokenDto jwtTokenDto = jwtTokenProvider.generateJwtTokenDto(member);
         // redis에 <refreshToken, member.id>로 사용자 정보 저장.
-        redisService.setValue(jwtTokenDto.getRefreshToken(), member.getId(), 7L, TimeUnit.MINUTES);
+        redisService.setValue(jwtTokenDto.getRefreshToken(), member.getId().toString(), 7L, TimeUnit.MINUTES);
 
         return jwtTokenDto;
     }
