@@ -1,6 +1,7 @@
 package com.KooKPaP.server.global.jwt;
 
 import com.KooKPaP.server.global.common.exception.CustomException;
+import com.KooKPaP.server.global.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Authentication authentication = tokenProvider.getAuthentication(jwt);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            }else request.setAttribute("exception", ErrorCode.JWT_ABSENCE_TOKEN);
         } catch (CustomException e) {
             request.setAttribute("exception", e.getErrorCode());
         }

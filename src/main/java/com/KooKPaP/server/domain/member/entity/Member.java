@@ -36,4 +36,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "address", columnDefinition = "text") // MANAGER 에게는 딱히 필요 없을것 같아서 nullable = true로 설정
+    private String address;
 }
