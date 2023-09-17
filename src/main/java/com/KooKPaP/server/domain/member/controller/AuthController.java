@@ -28,8 +28,8 @@ public class AuthController {
     private final CommonAuthService commonAuthService;
 
     @PostMapping("/email")
-    public ApplicationResponse<String> verifyEmail(@RequestBody Map<String, String> verifyEmailReq) {
-        String email = verifyEmailReq.get("email");
+    public ApplicationResponse<String> verifyEmail(@RequestBody EmailReq emailReq) {
+        String email = emailReq.getEmail();
         if (!generalAuthService.isDuplicatedEmail(email)) {
             generalAuthService.sendAuthCode(email);
         }
@@ -113,9 +113,9 @@ public class AuthController {
 
     @PatchMapping("/update/email")
     public ApplicationResponse<AuthMeRes> memberEmailUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                            @RequestBody EmailUpdateReq emailUpdateReq) {
+                                                            @RequestBody EmailReq emailReq) {
         Long id = principalDetails.getMember().getId();
-        String newEmail = emailUpdateReq.getEmail();
+        String newEmail = emailReq.getEmail();
         commonAuthService.updateEmail(id, newEmail);
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, commonAuthService.getMemberInfo(id));
