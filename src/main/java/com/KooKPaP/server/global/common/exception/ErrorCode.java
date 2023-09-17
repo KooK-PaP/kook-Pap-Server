@@ -29,7 +29,7 @@ public enum ErrorCode {
     AUTH_DEPRECATED_REFRESH_TOKEN(HttpStatus.BAD_REQUEST, "만료된 Refresh 토큰입니다.", 2015),
     AUTH_DEPRECATED_ACCESS_TOKEN(HttpStatus.UNAUTHORIZED, "더 이상 사용되지 않는 Access 토큰입니다", 2016),
     AUTH_MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당하는 정보의 사용자를 찾을 수 없습니다.", 2017),
-    AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER(HttpStatus.BAD_REQUEST, "카카오로 회원가입하신 사용자는 사용할 수 없는 기증입니다.", 2018),
+    AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER(HttpStatus.BAD_REQUEST, "카카오로 회원가입하신 사용자는 사용할 수 없는 기능입니다.", 2018),
     AUTH_WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.", 2019),
     AUTH_NOT_ALLOWED_ACCESS(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.", 2020),
 

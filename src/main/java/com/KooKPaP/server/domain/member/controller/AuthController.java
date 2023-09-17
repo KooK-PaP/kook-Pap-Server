@@ -116,7 +116,9 @@ public class AuthController {
                                                             @RequestBody EmailReq emailReq) {
         Long id = principalDetails.getMember().getId();
         String newEmail = emailReq.getEmail();
-        commonAuthService.updateEmail(id, newEmail);
+
+        if(generalAuthService.isDuplicatedEmail(emailReq.getEmail()))
+            commonAuthService.updateEmail(id, newEmail);
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, commonAuthService.getMemberInfo(id));
     }

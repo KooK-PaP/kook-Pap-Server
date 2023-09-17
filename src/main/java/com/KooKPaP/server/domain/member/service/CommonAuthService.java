@@ -2,6 +2,7 @@ package com.KooKPaP.server.domain.member.service;
 
 import com.KooKPaP.server.domain.member.dto.request.MemberUpdateReq;
 import com.KooKPaP.server.domain.member.dto.response.AuthMeRes;
+import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
 import com.KooKPaP.server.global.common.exception.CustomException;
@@ -74,10 +75,12 @@ public class CommonAuthService {
     public void updateEmail(Long id, String email) {
         // email이 인증되지 않았다면, Exception
         if(!"verified".equals(redisService.getValue(email))) throw new CustomException(ErrorCode.AUTH_UNVERIFIED_EMAIL);
-        Optional<Member> memberOptional = memberRepository.findById(id);
 
+        Optional<Member> memberOptional = memberRepository.findById(id);
         if(memberOptional.isEmpty()) throw new CustomException(ErrorCode.AUTH_MEMBER_NOT_FOUND);
         Member member = memberOptional.get();
+
+        if(member.getType() == LoginType.KAKAO) throw new CustomException(ErrorCode.AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER);
 
         member.updateEmail(email);
         redisService.deleteValue(email);
