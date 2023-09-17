@@ -1,7 +1,7 @@
 package com.KooKPaP.server.domain.member.service;
 
-import com.KooKPaP.server.domain.member.dto.request.GeneralLoginReqDto;
-import com.KooKPaP.server.domain.member.dto.request.SignupReqDto;
+import com.KooKPaP.server.domain.member.dto.request.GeneralLoginReq;
+import com.KooKPaP.server.domain.member.dto.request.SignupReq;
 import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
@@ -59,7 +59,7 @@ public class GeneralAuthService {
         redisService.setValue(email, "verified", 30L, TimeUnit.MINUTES);
     }
 
-    public void signup(SignupReqDto requestDto) {
+    public void signup(SignupReq requestDto) {
         // email이 인증되지 않았다면, Exception
         if(!"verified".equals(redisService.getValue(requestDto.getEmail()))) throw new CustomException(ErrorCode.AUTH_UNVERIFIED_EMAIL);
 
@@ -76,7 +76,7 @@ public class GeneralAuthService {
         memberRepository.save(member);
     }
 
-    public JwtTokenDto login(GeneralLoginReqDto loginReqDto) {
+    public JwtTokenDto login(GeneralLoginReq loginReqDto) {
         Member member = memberRepository.findByEmail(loginReqDto.getEmail()).orElseThrow(
                 () -> new CustomException(ErrorCode.AUTH_INVALID_LOGIN_INFO));
 

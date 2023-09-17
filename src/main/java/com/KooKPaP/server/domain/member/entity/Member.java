@@ -1,5 +1,6 @@
 package com.KooKPaP.server.domain.member.entity;
 
+import com.KooKPaP.server.domain.member.dto.request.MemberUpdateReq;
 import com.KooKPaP.server.global.common.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -50,5 +51,19 @@ public class Member extends BaseTimeEntity {
         this.type = type;
         this.role = role;
         this.address = address;
+    }
+
+    public void update(MemberUpdateReq memberUpdateReq) {
+        this.name = memberUpdateReq.getName();
+        this.role = memberUpdateReq.getRole();
+        this.address = memberUpdateReq.getAddress();
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
     }
 }

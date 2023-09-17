@@ -121,10 +121,12 @@ public class KakaoAuthService {
 
         try {
             member = memberRepository.findByEmail(profile.getKakao_account().getEmail()).get();
+            if(member.getType()!=LoginType.KAKAO) throw new CustomException(ErrorCode.AUTH_DUPLICATED_EMAIL);
         } catch (NoSuchElementException e) {
 
             member = Member.builder()
                     .name(profile.getKakao_account().getProfile().getNickname())
+                    // email을 동의했으면 카카오 email로, 동의 안했으면 카카오 id로 저장
                     .email(profile.getKakao_account().getEmail())
                     .type(LoginType.KAKAO)
                     .role(Role.CUSTOMER)

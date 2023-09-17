@@ -5,8 +5,7 @@ import lombok.Getter;
 import javax.validation.constraints.Pattern;
 
 @Getter
-public class VerifyAuthCodeReqDto {
+public class EmailUpdateReq {
     @Pattern(regexp = "^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")
     private String email;
-    private String authCode;
 }

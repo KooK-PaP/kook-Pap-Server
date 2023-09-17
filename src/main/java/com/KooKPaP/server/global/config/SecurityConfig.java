@@ -43,7 +43,7 @@ public class SecurityConfig {
         // http.anonymous()를 사용해야될까?
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll() // pre-flight 용
-                .antMatchers("/auth/logout").authenticated()
+                .antMatchers("/auth/logout", "/auth/withdrawal", "/auth/me", "/auth/update", "/auth/update/email", "/auth/password").authenticated()
                 .antMatchers().hasAnyRole("MANAGER")
                 .anyRequest().permitAll()
 
