@@ -28,26 +28,26 @@ public class AuthController {
     private final CommonAuthService commonAuthService;
 
     @PostMapping("/email")
-    public ApplicationResponse<String> verifyEmail(@RequestBody EmailReq emailReq) {
+    public ApplicationResponse<?> verifyEmail(@RequestBody EmailReq emailReq) {
         String email = emailReq.getEmail();
         if (!generalAuthService.isDuplicatedEmail(email)) {
             generalAuthService.sendAuthCode(email);
         }
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "인증 코드가 전송되었습니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 
     @PostMapping("/code")
-    public ApplicationResponse<String> verifyCode(@Valid @RequestBody VerifyAuthCodeReq verifyAuthCodeReq) {
+    public ApplicationResponse<?> verifyCode(@Valid @RequestBody VerifyAuthCodeReq verifyAuthCodeReq) {
         generalAuthService.verifyAuthCode(verifyAuthCodeReq.getEmail(), verifyAuthCodeReq.getAuthCode());
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "인증이 완료되었습니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 
     @PostMapping("/signup")
-    public ApplicationResponse<String> signup(@Valid @RequestBody SignupReq signupReq) {
+    public ApplicationResponse<?> signup(@Valid @RequestBody SignupReq signupReq) {
         generalAuthService.signup(signupReq);
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_CREATED, "회원가입이 완료되었습니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_CREATED, null);
     }
 
     @PostMapping("/login/general")
@@ -65,7 +65,7 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ApplicationResponse<String> logout(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ApplicationResponse<?> logout(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                               HttpServletRequest request, @RequestBody RefreshTokenReq refreshTokenReq) {
 
         String accessToken = request.getHeader(JwtAttribute.HeaderString).replace(JwtAttribute.TOKEN_PREFIX, "");
@@ -73,17 +73,17 @@ public class AuthController {
         commonAuthService.deprecateTokens(accessToken, refreshTokenReq.getRefreshToken());
         kakaoAuthService.serviceLogout(principalDetails);
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "로그아웃 되었습니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 
     @PostMapping("/reissue")
-    public ApplicationResponse<JwtTokenDto> reissue(@RequestBody Map<String, String> request) {
-        JwtTokenDto jwtTokenDto = commonAuthService.reissue(request.get("refreshToken"));
+    public ApplicationResponse<JwtTokenDto> reissue(@RequestBody RefreshTokenReq request) {
+        JwtTokenDto jwtTokenDto = commonAuthService.reissue(request.getRefreshToken());
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
     }
 
     @PostMapping("/withdrawal")
-    public ApplicationResponse<String> withdrawal(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ApplicationResponse<?> withdrawal(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                   HttpServletRequest request, @RequestBody RefreshTokenReq refreshTokenReq) {
         commonAuthService.deleteMember(principalDetails);
         String accessToken = request.getHeader(JwtAttribute.HeaderString).replace(JwtAttribute.TOKEN_PREFIX, "");
@@ -91,7 +91,7 @@ public class AuthController {
 
         // 지금은 member만 삭제시키고, 추후 관련 엔티티들도 전부 삭제하는 로직으로 업데이트 하겠음.
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "회원 탈퇴가 완료되었습니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 
     @GetMapping("/me")
@@ -124,20 +124,20 @@ public class AuthController {
     }
 
     @PostMapping("/password")
-    public ApplicationResponse<String> verifyPassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ApplicationResponse<?> verifyPassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                       @RequestBody PasswordReq passwordReq) {
         Long id = principalDetails.getMember().getId();
         commonAuthService.verifyPassword(id, passwordReq.getPassword());
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "비밀번호가 일치합니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 
     @PatchMapping("/password")
-    public ApplicationResponse<String> updatePassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
+    public ApplicationResponse<?> updatePassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                       @RequestBody PasswordReq passwordReq) {
         Long id = principalDetails.getMember().getId();
         commonAuthService.updatePassword(id, passwordReq.getPassword());
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, "비밀번호가 변경되었습니다.");
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 }
