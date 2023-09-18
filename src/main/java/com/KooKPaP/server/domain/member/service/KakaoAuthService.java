@@ -121,12 +121,12 @@ public class KakaoAuthService {
 
         try {
             member = memberRepository.findByEmail(profile.getKakao_account().getEmail()).get();
+            // email이 같은데 KAKAO 사용자가 아니면, 이메일 중복으로 회원가입하려고 하는것. 따라서 Exception
             if(member.getType()!=LoginType.KAKAO) throw new CustomException(ErrorCode.AUTH_DUPLICATED_EMAIL);
         } catch (NoSuchElementException e) {
 
             member = Member.builder()
                     .name(profile.getKakao_account().getProfile().getNickname())
-                    // email을 동의했으면 카카오 email로, 동의 안했으면 카카오 id로 저장
                     .email(profile.getKakao_account().getEmail())
                     .type(LoginType.KAKAO)
                     .role(Role.CUSTOMER)
@@ -144,6 +144,7 @@ public class KakaoAuthService {
 
     public void serviceLogout(PrincipalDetails principalDetails){
         // 서비스 로그아웃(카카오)
+        // 카카오 accessToken 만료
         Member member = principalDetails.getMember();
 
         if(member.getType() != LoginType.KAKAO) return;

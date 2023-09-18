@@ -49,6 +49,7 @@ public class CommonAuthService {
     }
 
     public void deprecateTokens(String accessToken, String refreshToken) {
+        // 토큰 폐기
         redisService.setValue(accessToken, "Deprecated", 30L, TimeUnit.MINUTES);
         redisService.setValue(refreshToken, "Deprecated", 7L, TimeUnit.DAYS);
     }

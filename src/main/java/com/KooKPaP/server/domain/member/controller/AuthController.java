@@ -2,10 +2,12 @@ package com.KooKPaP.server.domain.member.controller;
 
 import com.KooKPaP.server.domain.member.dto.request.*;
 import com.KooKPaP.server.domain.member.dto.response.AuthMeRes;
+import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.service.CommonAuthService;
 import com.KooKPaP.server.domain.member.service.GeneralAuthService;
 import com.KooKPaP.server.domain.member.service.KakaoAuthService;
 import com.KooKPaP.server.global.common.dto.ApplicationResponse;
+import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.jwt.JwtAttribute;
 import com.KooKPaP.server.global.jwt.PrincipalDetails;
@@ -126,6 +128,9 @@ public class AuthController {
     @PostMapping("/password")
     public ApplicationResponse<?> verifyPassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                       @RequestBody PasswordReq passwordReq) {
+        if (principalDetails.getMember().getType()!= LoginType.GENERAL)
+            throw new CustomException(ErrorCode.AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER);
+
         Long id = principalDetails.getMember().getId();
         commonAuthService.verifyPassword(id, passwordReq.getPassword());
 
@@ -135,6 +140,9 @@ public class AuthController {
     @PatchMapping("/password")
     public ApplicationResponse<?> updatePassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                       @RequestBody PasswordReq passwordReq) {
+        if (principalDetails.getMember().getType()!= LoginType.GENERAL)
+            throw new CustomException(ErrorCode.AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER);
+
         Long id = principalDetails.getMember().getId();
         commonAuthService.updatePassword(id, passwordReq.getPassword());
 
