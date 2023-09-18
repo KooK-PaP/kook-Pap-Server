@@ -1,7 +1,7 @@
 package com.KooKPaP.server.domain.member.controller;
 
 import com.KooKPaP.server.domain.member.dto.request.*;
-import com.KooKPaP.server.domain.member.dto.response.AuthMeRes;
+import com.KooKPaP.server.domain.member.dto.response.MemberInfoRes;
 import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.service.CommonAuthService;
 import com.KooKPaP.server.domain.member.service.GeneralAuthService;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -97,16 +96,16 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ApplicationResponse<AuthMeRes> authMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ApplicationResponse<MemberInfoRes> authMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long id = principalDetails.getMember().getId();
-        AuthMeRes authMeRes = commonAuthService.getMemberInfo(id);
+        MemberInfoRes memberInfoRes = commonAuthService.getMemberInfo(id);
 
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, authMeRes);
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, memberInfoRes);
     }
 
     @PutMapping("/update")
-    public ApplicationResponse<AuthMeRes> memberUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                       @RequestBody MemberUpdateReq memberUpdateReq) {
+    public ApplicationResponse<MemberInfoRes> memberUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                           @RequestBody MemberUpdateReq memberUpdateReq) {
         Long id = principalDetails.getMember().getId();
         commonAuthService.updateMember(id, memberUpdateReq);
 
@@ -114,8 +113,8 @@ public class AuthController {
     }
 
     @PatchMapping("/update/email")
-    public ApplicationResponse<AuthMeRes> memberEmailUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                                            @RequestBody EmailReq emailReq) {
+    public ApplicationResponse<MemberInfoRes> memberEmailUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                                                @RequestBody EmailReq emailReq) {
         Long id = principalDetails.getMember().getId();
         String newEmail = emailReq.getEmail();
 

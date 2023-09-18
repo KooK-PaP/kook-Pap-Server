@@ -1,7 +1,7 @@
 package com.KooKPaP.server.domain.member.service;
 
 import com.KooKPaP.server.domain.member.dto.request.MemberUpdateReq;
-import com.KooKPaP.server.domain.member.dto.response.AuthMeRes;
+import com.KooKPaP.server.domain.member.dto.response.MemberInfoRes;
 import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
@@ -59,11 +59,11 @@ public class CommonAuthService {
         memberRepository.delete(member);
     }
 
-    public AuthMeRes getMemberInfo(Long id) {
+    public MemberInfoRes getMemberInfo(Long id) {
         Optional<Member> memberOptional = memberRepository.findById(id);
         if(memberOptional.isEmpty()) throw new CustomException(ErrorCode.AUTH_MEMBER_NOT_FOUND);
         Member member = memberOptional.get();
-        return new AuthMeRes().entityToDto(member);
+        return new MemberInfoRes().entityToDto(member);
     }
 
     public void updateMember(Long id, MemberUpdateReq memberUpdateReq) {

@@ -13,14 +13,14 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthMeRes {
+public class MemberInfoRes {
     private String name;
     private String email;
     private Role role;
     private String address;
     private LocalDateTime createdAt;
 
-    public AuthMeRes entityToDto(Member member) {
+    public MemberInfoRes entityToDto(Member member) {
         this.name = member.getName();
         this.email = member.getEmail();
         this.role = member.getRole();
