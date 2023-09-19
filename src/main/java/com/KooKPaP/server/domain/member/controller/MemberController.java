@@ -62,7 +62,7 @@ public class MemberController {
         Long id = principalDetails.getMember().getId();
         String newEmail = emailReq.getEmail();
 
-        if(generalAuthService.isDuplicatedEmail(emailReq.getEmail()))
+        if(!generalAuthService.isDuplicatedEmail(emailReq.getEmail()))
             commonAuthService.updateEmail(id, newEmail);
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, commonAuthService.getMemberInfo(id));

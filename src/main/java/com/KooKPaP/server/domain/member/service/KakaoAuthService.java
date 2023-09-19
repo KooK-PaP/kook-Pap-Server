@@ -48,8 +48,12 @@ public class KakaoAuthService {
         this.clientId = clientId;
     }
 
-    public OauthToken getKakaoAccessToken (String code) {
+    public OauthToken getKakaoAccessToken (String code, Role role) {
         RestTemplate rt = new RestTemplate();
+
+        String customerUri = "http://localhost:8080/auth/login/kakao/customer";
+        String managerUri="http://localhost:8080/auth/login/kakao/manager";
+        String redirectionUri = role == Role.CUSTOMER ? customerUri : managerUri;
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
@@ -57,7 +61,7 @@ public class KakaoAuthService {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("grant_type", "authorization_code");
         params.add("client_id", clientId);
-        params.add("redirect_uri", "http://localhost:8080/auth/login/kakao");
+        params.add("redirect_uri", redirectionUri);
         params.add("code", code);
         params.add("client_secret", clientSecret);
 
@@ -111,7 +115,7 @@ public class KakaoAuthService {
     }
 
 
-    public JwtTokenDto saveUserAndGetToken(OauthToken oauthToken) {
+    public JwtTokenDto saveUserAndGetToken(OauthToken oauthToken, Role role) {
 
         KakaoProfile profile = findProfile(oauthToken);
 
@@ -129,7 +133,7 @@ public class KakaoAuthService {
                     .name(profile.getKakao_account().getProfile().getNickname())
                     .email(profile.getKakao_account().getEmail())
                     .type(LoginType.KAKAO)
-                    .role(Role.CUSTOMER)
+                    .role(role)
                     .build();
 
             memberRepository.save(member);

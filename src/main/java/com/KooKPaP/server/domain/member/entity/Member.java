@@ -55,7 +55,6 @@ public class Member extends BaseTimeEntity {
 
     public void update(MemberUpdateReq memberUpdateReq) {
         this.name = memberUpdateReq.getName();
-        this.role = memberUpdateReq.getRole();
         this.address = memberUpdateReq.getAddress();
     }
 

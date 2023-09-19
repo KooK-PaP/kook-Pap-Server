@@ -4,6 +4,7 @@ import com.KooKPaP.server.domain.member.dto.request.GeneralLoginReq;
 import com.KooKPaP.server.domain.member.dto.request.SignupReq;
 import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.entity.Member;
+import com.KooKPaP.server.domain.member.entity.Role;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
 import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
@@ -59,7 +60,7 @@ public class GeneralAuthService {
         redisService.setValue(email, "verified", 30L, TimeUnit.MINUTES);
     }
 
-    public void signup(SignupReq requestDto) {
+    public void signup(SignupReq requestDto, Role role) {
         // email이 인증되지 않았다면, Exception
         if(!"verified".equals(redisService.getValue(requestDto.getEmail()))) throw new CustomException(ErrorCode.AUTH_UNVERIFIED_EMAIL);
 
@@ -69,7 +70,7 @@ public class GeneralAuthService {
                 .password(passwordEncoder.encode(requestDto.getPassword()))
                 .address(requestDto.getAddress())
                 .type(LoginType.GENERAL)
-                .role(requestDto.getRole())
+                .role(role)
                 .build();
 
         redisService.deleteValue(requestDto.getEmail());

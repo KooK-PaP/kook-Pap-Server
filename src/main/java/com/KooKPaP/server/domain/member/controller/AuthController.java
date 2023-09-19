@@ -1,6 +1,7 @@
 package com.KooKPaP.server.domain.member.controller;
 
 import com.KooKPaP.server.domain.member.dto.request.*;
+import com.KooKPaP.server.domain.member.entity.Role;
 import com.KooKPaP.server.domain.member.service.CommonAuthService;
 import com.KooKPaP.server.domain.member.service.GeneralAuthService;
 import com.KooKPaP.server.domain.member.service.KakaoAuthService;
@@ -41,9 +42,18 @@ public class AuthController {
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
     }
 
-    @PostMapping("/signup")
-    public ApplicationResponse<?> signup(@Valid @RequestBody SignupReq signupReq) {
-        generalAuthService.signup(signupReq);
+    @PostMapping("/signup/customer")
+    public ApplicationResponse<?> customerSignup(@Valid @RequestBody SignupReq signupReq) {
+        // 소비자용 회원가입.
+        generalAuthService.signup(signupReq, Role.CUSTOMER);
+
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_CREATED, null);
+    }
+
+    @PostMapping("/signup/manager")
+    public ApplicationResponse<?> managerSignup(@Valid @RequestBody SignupReq signupReq) {
+        // 가게주인용 회원가입
+        generalAuthService.signup(signupReq, Role.MANAGER);
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_CREATED, null);
     }
@@ -55,10 +65,19 @@ public class AuthController {
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
     }
 
-    @GetMapping("/login/kakao")
-    public ApplicationResponse<JwtTokenDto> kakaoLogin(@RequestParam("code") String code) {
-        OauthToken oauthToken = kakaoAuthService.getKakaoAccessToken(code);
-        JwtTokenDto jwtTokenDto = kakaoAuthService.saveUserAndGetToken(oauthToken);
+    @GetMapping("/login/kakao/customer")
+    public ApplicationResponse<JwtTokenDto> kakaoCustomerLogin(@RequestParam("code") String code) {
+        // 변경대상
+        OauthToken oauthToken = kakaoAuthService.getKakaoAccessToken(code, Role.CUSTOMER);
+        JwtTokenDto jwtTokenDto = kakaoAuthService.saveUserAndGetToken(oauthToken, Role.CUSTOMER);
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
+    }
+
+    @GetMapping("/login/kakao/manager")
+    public ApplicationResponse<JwtTokenDto> kakaoManagerLogin(@RequestParam("code") String code) {
+        // 변경대상
+        OauthToken oauthToken = kakaoAuthService.getKakaoAccessToken(code, Role.MANAGER);
+        JwtTokenDto jwtTokenDto = kakaoAuthService.saveUserAndGetToken(oauthToken, Role.MANAGER);
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
     }
 
