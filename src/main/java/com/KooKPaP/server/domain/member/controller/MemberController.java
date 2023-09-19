@@ -40,7 +40,7 @@ public class MemberController {
     }
 
     @GetMapping("/me")
-    public ApplicationResponse<MemberInfoRes> authMe(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+    public ApplicationResponse<MemberInfoRes> getMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long id = principalDetails.getMember().getId();
         MemberInfoRes memberInfoRes = commonAuthService.getMemberInfo(id);
 
