@@ -98,4 +98,16 @@ public class AuthController {
         JwtTokenDto jwtTokenDto = commonAuthService.reissue(request.getRefreshToken());
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, jwtTokenDto);
     }
+
+    @PostMapping("/withdrawal")
+    public ApplicationResponse<?> withdrawal(@AuthenticationPrincipal PrincipalDetails principalDetails,
+                                             HttpServletRequest request, @RequestBody RefreshTokenReq refreshTokenReq) {
+        commonAuthService.deleteMember(principalDetails);
+        String accessToken = request.getHeader(JwtAttribute.HeaderString).replace(JwtAttribute.TOKEN_PREFIX, "");
+        commonAuthService.deprecateTokens(accessToken, refreshTokenReq.getRefreshToken());
+
+        // 지금은 member만 삭제시키고, 추후 관련 엔티티들도 전부 삭제하는 로직으로 업데이트 하겠음.
+
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
+    }
 }

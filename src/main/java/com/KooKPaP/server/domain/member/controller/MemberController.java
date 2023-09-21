@@ -11,13 +11,11 @@ import com.KooKPaP.server.domain.member.service.GeneralAuthService;
 import com.KooKPaP.server.global.common.dto.ApplicationResponse;
 import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
-import com.KooKPaP.server.global.jwt.JwtAttribute;
 import com.KooKPaP.server.global.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,18 +24,6 @@ public class MemberController {
     private final GeneralAuthService generalAuthService;
     private final CommonAuthService commonAuthService;
 
-
-    @PostMapping("/withdrawal")
-    public ApplicationResponse<?> withdrawal(@AuthenticationPrincipal PrincipalDetails principalDetails,
-                                             HttpServletRequest request, @RequestBody RefreshTokenReq refreshTokenReq) {
-        commonAuthService.deleteMember(principalDetails);
-        String accessToken = request.getHeader(JwtAttribute.HeaderString).replace(JwtAttribute.TOKEN_PREFIX, "");
-        commonAuthService.deprecateTokens(accessToken, refreshTokenReq.getRefreshToken());
-
-        // 지금은 member만 삭제시키고, 추후 관련 엔티티들도 전부 삭제하는 로직으로 업데이트 하겠음.
-
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
-    }
 
     @GetMapping("/me")
     public ApplicationResponse<MemberInfoRes> getMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
