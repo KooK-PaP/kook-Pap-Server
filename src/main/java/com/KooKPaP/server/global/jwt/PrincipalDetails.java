@@ -23,7 +23,7 @@ public class PrincipalDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한 정보 반환
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString()));
+        authorities.add(new SimpleGrantedAuthority(member.getRole().toString()));
 
         return authorities;
     }

@@ -1,6 +1,5 @@
 package com.KooKPaP.server.global.config;
 
-import com.KooKPaP.server.domain.member.entity.Role;
 import com.KooKPaP.server.global.jwt.CustomAccessDeniedHandler;
 import com.KooKPaP.server.global.jwt.CustomAuthenticationEntryPoint;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -42,9 +43,9 @@ public class SecurityConfig {
         // http.anonymous()를 사용해야될까?
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll() // pre-flight 용
-                .antMatchers("알아서 채우길11").permitAll()
-                .antMatchers("알아서 채우길22").hasAnyRole("MANAGER")
-                .anyRequest().authenticated()
+                .antMatchers("/auth/logout", "/auth/withdrawal", "/auth/me", "/auth/update", "/auth/update/email", "/auth/password").authenticated()
+                .antMatchers().hasAnyRole("MANAGER")
+                .anyRequest().permitAll()
 
                 // exception handler 설정
                 .and()
@@ -83,5 +84,11 @@ public class SecurityConfig {
         // 모든 경로에 대해 앞서 설정한 corsConfiguration를 적용
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        // 비밀번호 암호화
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }

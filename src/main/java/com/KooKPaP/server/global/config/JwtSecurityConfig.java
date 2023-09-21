@@ -1,5 +1,6 @@
 package com.KooKPaP.server.global.config;
 
+import com.KooKPaP.server.global.common.service.RedisService;
 import com.KooKPaP.server.global.jwt.JwtFilter;
 import com.KooKPaP.server.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
     private final JwtTokenProvider tokenProvider;
+    private final RedisService redisService;
 
     @Override
     public void configure(HttpSecurity http) {
-        JwtFilter customFilter = new JwtFilter(tokenProvider);
+        JwtFilter customFilter = new JwtFilter(tokenProvider, redisService);
         http.addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

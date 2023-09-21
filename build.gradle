@@ -46,6 +46,12 @@ dependencies {
 	// JWT
 	implementation 'com.auth0:java-jwt:4.4.0'
 
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// 인증메일 관련 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 }
