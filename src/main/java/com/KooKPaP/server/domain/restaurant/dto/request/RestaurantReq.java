@@ -5,6 +5,7 @@ import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
 import lombok.Getter;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Getter
 public class RestaurantReq {
@@ -18,7 +19,10 @@ public class RestaurantReq {
 
     private String address;
 
-    public Restaurant toEntity(Member member) {
+    @NotNull
+    private OperationReq operation;
+
+    public Restaurant from(Member member) {
         return Restaurant.builder()
                 .name(this.name)
                 .member(member)

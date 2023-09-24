@@ -1,8 +1,8 @@
 package com.KooKPaP.server.domain.restaurant.dto.request;
 
+import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
 
-import javax.persistence.*;
 import java.time.LocalTime;
 
 public class OperationReq {
@@ -28,4 +28,28 @@ public class OperationReq {
 
     private LocalTime satOpen;
     private LocalTime satClose;
+
+    private LocalTime sunOpen;
+
+    private LocalTime sunClose;
+
+    public Operation from(Restaurant restaurant) {
+        return Operation.builder()
+                .restaurant(restaurant)
+                .monOpen(this.monOpen)
+                .monClose(this.monClose)
+                .tueOpen(this.tueOpen)
+                .tueClose(this.tueClose)
+                .wedOpen(this.wedOpen)
+                .wedClose(this.wedClose)
+                .thuOpen(this.thuOpen)
+                .thuClose(this.thuClose)
+                .friOpen(this.friOpen)
+                .friClose(this.friClose)
+                .satOpen(this.satOpen)
+                .satClose(this.satClose)
+                .sunOpen(this.sunOpen)
+                .sunClose(this.sunClose)
+                .build();
+    }
 }
