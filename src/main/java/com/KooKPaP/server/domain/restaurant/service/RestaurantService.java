@@ -4,9 +4,11 @@ import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.entity.Role;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
 import com.KooKPaP.server.domain.restaurant.dto.request.RestaurantReq;
+import com.KooKPaP.server.domain.restaurant.dto.response.OperationRes;
 import com.KooKPaP.server.domain.restaurant.dto.response.RestaurantRes;
 import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
+import com.KooKPaP.server.domain.restaurant.repository.OperationRepository;
 import com.KooKPaP.server.domain.restaurant.repository.RestaurantRepository;
 import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
@@ -21,6 +23,7 @@ public class RestaurantService {
 
     private final MemberRepository memberRepository;
     private final RestaurantRepository restaurantRepository;
+    private final OperationRepository operationRepository;
 
     @Transactional
     public RestaurantRes register(Long id, RestaurantReq restaurantReq) {
@@ -31,11 +34,15 @@ public class RestaurantService {
         }
 
         // Business Logic
-        Restaurant restaurant = restaurantReq.toEntity(member);
+        Restaurant restaurant = restaurantReq.from(member);
+        Operation operation = restaurantReq.getOperation().from(restaurant);
         restaurantRepository.save(restaurant);
+        operationRepository.save(operation);
+
 
         // Response
-        RestaurantRes restaurantRes = new RestaurantRes();
+        OperationRes operationRes = OperationRes.of(operation);
+        RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
         return restaurantRes;
     }
 }
