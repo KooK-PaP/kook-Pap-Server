@@ -1,6 +1,7 @@
 package com.KooKPaP.server.domain.restaurant.entity;
 
 import com.KooKPaP.server.domain.member.entity.Member;
+import com.KooKPaP.server.domain.restaurant.dto.request.RestaurantReq;
 import com.KooKPaP.server.global.common.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,7 +39,14 @@ public class Restaurant extends BaseTimeEntity {
     @Column(name = "introduction", nullable = false, columnDefinition = "text")
     private String introduction;        // 가게 설명
 
-    @Builder
+    public void update(RestaurantReq restaurantReq) {
+        this.name = restaurantReq.getName();
+        this.address = restaurantReq.getAddress();
+        this.callNumber = restaurantReq.getCallNumber();
+        this.introduction = restaurantReq.getIntroduction();
+    }
+
+                       @Builder
     public Restaurant(Long id, Member member, String name, String address, String callNumber, String introduction) {
         this.id = id;
         this.member = member;

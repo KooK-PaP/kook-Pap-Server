@@ -1,5 +1,6 @@
 package com.KooKPaP.server.domain.restaurant.entity;
 
+import com.KooKPaP.server.domain.restaurant.dto.request.OperationReq;
 import com.KooKPaP.server.global.common.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -67,6 +68,23 @@ public class Operation extends BaseTimeEntity {
 
     @Column(name = "sun_close")
     private LocalTime sunClose;
+
+    public void update(OperationReq operationReq) {
+        this.monOpen = operationReq.getMonOpen();
+        this.monClose = operationReq.getMonClose();
+        this.tueOpen = operationReq.getTueOpen();
+        this.tueClose = operationReq.getTueClose();
+        this.wedOpen = operationReq.getWedOpen();
+        this.wedClose = operationReq.getWedClose();
+        this.thuOpen = operationReq.getThuOpen();
+        this.thuClose = operationReq.getThuClose();
+        this.friOpen = operationReq.getFriOpen();
+        this.friClose = operationReq.getFriClose();
+        this.satOpen = operationReq.getSatOpen();
+        this.satClose = operationReq.getSatClose();
+        this.sunOpen = operationReq.getSunOpen();
+        this.sunClose = operationReq.getSunClose();
+    }
 
     @Builder
     public Operation(Long id, Restaurant restaurant, LocalTime monOpen, LocalTime monClose, LocalTime tueOpen,

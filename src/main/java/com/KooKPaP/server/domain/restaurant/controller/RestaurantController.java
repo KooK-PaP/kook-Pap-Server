@@ -8,11 +8,7 @@ import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -27,5 +23,11 @@ public class RestaurantController {
     public ApplicationResponse<RestaurantRes> register(@AuthenticationPrincipal PrincipalDetails principalDetails, @Valid @RequestBody RestaurantReq restaurantReq) {
         Long id = principalDetails.getMember().getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.register(id, restaurantReq));
+    }
+
+    @PutMapping("/v1/update/{restaurant_id}")
+    public ApplicationResponse<RestaurantRes> update(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("restaurant_id") Long restaurantId, @Valid @RequestBody RestaurantReq restaurantReq) {
+        Long id = principalDetails.getMember().getId();
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.update(id, restaurantId, restaurantReq));
     }
 }

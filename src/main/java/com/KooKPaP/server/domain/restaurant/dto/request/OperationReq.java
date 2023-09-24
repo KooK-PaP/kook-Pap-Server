@@ -2,9 +2,11 @@ package com.KooKPaP.server.domain.restaurant.dto.request;
 
 import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
+import lombok.Getter;
 
 import java.time.LocalTime;
 
+@Getter
 public class OperationReq {
     private LocalTime monOpen;
 
