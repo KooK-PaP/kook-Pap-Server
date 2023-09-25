@@ -79,6 +79,7 @@ public class RestaurantService {
 
         // Business Logic
         restaurantRepository.deleteById(restaurantId);
+        operationRepository.deleteByRestaurantId(restaurantId);
 
         // Response
         return null;
