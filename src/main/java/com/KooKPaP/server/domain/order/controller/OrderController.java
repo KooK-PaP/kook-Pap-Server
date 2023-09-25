@@ -1,8 +1,8 @@
 package com.KooKPaP.server.domain.order.controller;
 
 import com.KooKPaP.server.domain.order.OrderService.OrderService;
-import com.KooKPaP.server.domain.order.dto.request.OrderReq;
-import com.KooKPaP.server.domain.order.dto.response.OrderRes;
+import com.KooKPaP.server.domain.order.dto.request.BucketReq;
+import com.KooKPaP.server.domain.order.dto.response.BucketRes;
 import com.KooKPaP.server.global.common.dto.ApplicationResponse;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.jwt.PrincipalDetails;
@@ -20,9 +20,9 @@ public class OrderController {
 
     // consumer
     @PostMapping("/consumer")
-    public ApplicationResponse<OrderRes> order(@AuthenticationPrincipal PrincipalDetails principalDetails, @Valid @RequestBody OrderReq orderReq){
+    public ApplicationResponse<BucketRes> order(@AuthenticationPrincipal PrincipalDetails principalDetails, @Valid @RequestBody BucketReq bucketReq){
         Long id = principalDetails.getMember().getId();
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, orderService.order(id, orderReq));
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, orderService.order(id, bucketReq));
     }
 
 //    @PostMapping("/cancel/{bucket_id}")
