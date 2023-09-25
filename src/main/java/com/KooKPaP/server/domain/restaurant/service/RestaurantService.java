@@ -79,4 +79,17 @@ public class RestaurantService {
         // Response
         return null;
     }
+
+    public RestaurantRes getOne(Long restaurantId) {
+        // Validation
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
+
+        // Business Logic
+        Operation operation = operationRepository.findOperationByRestaurantIdAndDeletedAtIsNull(restaurantId).orElse(null);
+        OperationRes operationRes = OperationRes.of(operation);
+        RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
+
+        // Response
+        return restaurantRes;
+    }
 }

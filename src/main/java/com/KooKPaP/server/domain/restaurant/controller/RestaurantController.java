@@ -22,7 +22,7 @@ public class RestaurantController {
     @PostMapping("/v1/register")
     public ApplicationResponse<RestaurantRes> register(@AuthenticationPrincipal PrincipalDetails principalDetails, @Valid @RequestBody RestaurantReq restaurantReq) {
         Long id = principalDetails.getMember().getId();
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.register(id, restaurantReq));
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_CREATED, restaurantService.register(id, restaurantReq));
     }
 
     @PutMapping("/v1/update/{restaurant_id}")
@@ -35,5 +35,10 @@ public class RestaurantController {
     public ApplicationResponse<Void> delete(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("restaurant_id") Long restaurantId) {
         Long id = principalDetails.getMember().getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.delete(id, restaurantId));
+    }
+
+    @GetMapping("/v1/{restaurant_id}")
+    public ApplicationResponse<RestaurantRes> getOne(@PathVariable("restaurant_id") Long restaurantId) {
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.getOne(restaurantId));
     }
 }
