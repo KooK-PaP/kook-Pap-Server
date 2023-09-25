@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +41,11 @@ public class RestaurantController {
     @GetMapping("/v1/{restaurant_id}")
     public ApplicationResponse<RestaurantRes> getOne(@PathVariable("restaurant_id") Long restaurantId) {
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.getOne(restaurantId));
+    }
+
+    @GetMapping("/v1/my")
+    public ApplicationResponse<List<RestaurantRes>> getMy(@AuthenticationPrincipal PrincipalDetails principalDetails) {
+        Long id = principalDetails.getMember().getId();
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.getMy(id));
     }
 }

@@ -16,6 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -88,6 +92,20 @@ public class RestaurantService {
         Operation operation = operationRepository.findOperationByRestaurantIdAndDeletedAtIsNull(restaurantId).orElse(null);
         OperationRes operationRes = OperationRes.of(operation);
         RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
+
+        // Response
+        return restaurantRes;
+    }
+
+    public List<RestaurantRes> getMy(Long id) {
+        // Validation: Member에 대한 권한 검증 필요 여부 판단
+
+        // Business Logic
+        List<RestaurantRes> restaurantRes = new ArrayList<>();
+        List<Object[]> restaurantList = restaurantRepository.findRestaurantWithOperationByMemberId(id).orElse(null);
+        for(Object[] objects : restaurantList) {
+            OperationRes operationRes = OperationRes.of(new Operation((Long) objects[10], (Restaurant) objects[11], (LocalTime) objects[12], (LocalTime) objects[13], (LocalTime) objects[14], (LocalTime) objects[15], (LocalTime) objects[16], (LocalTime) objects[17], (LocalTime) objects[18], (LocalTime) objects[19], (LocalTime) objects[20], (LocalTime) objects[21], (LocalTime) objects[22], (LocalTime) objects[23], (LocalTime) objects[23], (LocalTime) objects[24]));
+        }
 
         // Response
         return restaurantRes;
