@@ -55,7 +55,7 @@ public class RestaurantService {
         }
 
         // Business Logic
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
+        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
         Operation operation = operationRepository.findOperationByRestaurantIdAndDeletedAtIsNull(restaurantId).orElse(null);
         restaurant.update(restaurantReq);
         operation.update(restaurantReq.getOperation());
@@ -69,7 +69,7 @@ public class RestaurantService {
     @Transactional
     public Void delete(Long id, Long restaurantId) {
         // Validation
-        if(restaurantRepository.existsRestaurantByIdAndMemberId(restaurantId, id).equals(Boolean.FALSE)) {
+        if(restaurantRepository.existsRestaurantByIdAndMemberIdAAndDeletedAtIsNull(restaurantId, id).equals(Boolean.FALSE)) {
             throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND);
         }
 
@@ -82,7 +82,7 @@ public class RestaurantService {
 
     public RestaurantRes getOne(Long restaurantId) {
         // Validation
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
+        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
         Operation operation = operationRepository.findOperationByRestaurantIdAndDeletedAtIsNull(restaurantId).orElse(null);
