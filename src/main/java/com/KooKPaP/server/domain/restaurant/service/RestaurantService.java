@@ -65,4 +65,18 @@ public class RestaurantService {
         RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
         return restaurantRes;
     }
+
+    @Transactional
+    public Void delete(Long id, Long restaurantId) {
+        // Validation
+        if(restaurantRepository.existsRestaurantByIdAndMemberId(restaurantId, id).equals(Boolean.FALSE)) {
+            throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND);
+        }
+
+        // Business Logic
+        restaurantRepository.deleteById(restaurantId);
+
+        // Response
+        return null;
+    }
 }

@@ -30,4 +30,10 @@ public class RestaurantController {
         Long id = principalDetails.getMember().getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.update(id, restaurantId, restaurantReq));
     }
+
+    @DeleteMapping("/v1/delete/{restaurant_id}")
+    public ApplicationResponse<Void> delete(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("restaurant_id") Long restaurantId) {
+        Long id = principalDetails.getMember().getId();
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.delete(id, restaurantId));
+    }
 }
