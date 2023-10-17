@@ -58,10 +58,8 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
-
-        Operation operation = operationRepository.findOperationByDeletedAtIsNull().orElse(null);
         restaurant.update(restaurantReq);
-        operation.update(restaurantReq.getOperation()); // RequestDto에서 NotNull 어노테이션으로 유효성 검증 진행 (NPE 발생 가능성 예방)
+        restaurant.getOperation().update(restaurantReq.getOperation()); // RequestDto에서 NotNull 어노테이션으로 유효성 검증 진행 (NPE 발생 가능성 예방)
 
         // Response
         RestaurantRes restaurantRes = RestaurantRes.of(restaurant);
@@ -88,7 +86,6 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
-        Operation operation = operationRepository.findOperationByDeletedAtIsNull().orElse(null);
         RestaurantRes restaurantRes = RestaurantRes.of(restaurant);
 
         // Response
