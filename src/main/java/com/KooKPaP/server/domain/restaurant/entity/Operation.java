@@ -23,10 +23,6 @@ public class Operation extends BaseTimeEntity {
     @Column(name = "id", nullable = false, columnDefinition = "bigint")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
-
     @Column(name = "mon_open")
     private LocalTime monOpen;
 
@@ -87,11 +83,10 @@ public class Operation extends BaseTimeEntity {
     }
 
     @Builder
-    public Operation(Long id, Restaurant restaurant, LocalTime monOpen, LocalTime monClose, LocalTime tueOpen,
+    public Operation(Long id, LocalTime monOpen, LocalTime monClose, LocalTime tueOpen,
                      LocalTime tueClose, LocalTime wedOpen, LocalTime wedClose, LocalTime thuOpen, LocalTime thuClose,
                      LocalTime friOpen, LocalTime friClose, LocalTime satOpen, LocalTime satClose, LocalTime sunOpen, LocalTime sunClose) {
         this.id = id;
-        this.restaurant = restaurant;
         this.monOpen = monOpen;
         this.monClose = monClose;
         this.tueOpen = tueOpen;
