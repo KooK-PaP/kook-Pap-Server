@@ -4,7 +4,6 @@ import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.entity.Role;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
 import com.KooKPaP.server.domain.restaurant.dto.request.RestaurantReq;
-import com.KooKPaP.server.domain.restaurant.dto.response.OperationRes;
 import com.KooKPaP.server.domain.restaurant.dto.response.RestaurantRes;
 import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
@@ -13,10 +12,11 @@ import com.KooKPaP.server.domain.restaurant.repository.RestaurantRepository;
 import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,15 +38,13 @@ public class RestaurantService {
         }
 
         // Business Logic: 레스토랑/운영시간 저장
-        Restaurant restaurant = restaurantReq.from(member);
-        Operation operation = restaurantReq.getOperation().from(restaurant);
-        restaurantRepository.save(restaurant);
+        Operation operation = restaurantReq.getOperation().from();
         operationRepository.save(operation);
-
+        Restaurant restaurant = restaurantReq.from(member, operation);
+        restaurantRepository.save(restaurant);
 
         // Response
-        OperationRes operationRes = OperationRes.of(operation);
-        RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
+        RestaurantRes restaurantRes = RestaurantRes.of(restaurant);
         return restaurantRes;
     }
 
@@ -57,29 +55,29 @@ public class RestaurantService {
         if(!member.getRole().equals(Role.MANAGER)) {
             throw new CustomException(ErrorCode.AUTH_NOT_ALLOWED_ACCESS);
         }
+        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
-        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
-        Operation operation = operationRepository.findOperationByRestaurantIdAndDeletedAtIsNull(restaurantId).orElse(null);
+
+        Operation operation = operationRepository.findOperationByDeletedAtIsNull().orElse(null);
         restaurant.update(restaurantReq);
         operation.update(restaurantReq.getOperation()); // RequestDto에서 NotNull 어노테이션으로 유효성 검증 진행 (NPE 발생 가능성 예방)
 
         // Response
-        OperationRes operationRes = OperationRes.of(operation);
-        RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
+        RestaurantRes restaurantRes = RestaurantRes.of(restaurant);
         return restaurantRes;
     }
 
     @Transactional
     public Void delete(Long id, Long restaurantId) {
         // Validation
-        if(restaurantRepository.existsRestaurantByIdAndMemberIdAAndDeletedAtIsNull(restaurantId, id).equals(Boolean.FALSE)) {
+        if(restaurantRepository.existsRestaurantByIdAndMemberIdAndDeletedAtIsNull(restaurantId, id).equals(Boolean.FALSE)) {
             throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND);
         }
 
         // Business Logic
         restaurantRepository.deleteById(restaurantId);
-        operationRepository.deleteByRestaurantId(restaurantId);
+        //operationRepository.deleteByRestaurantId(restaurantId);
 
         // Response
         return null;
@@ -90,9 +88,8 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
-        Operation operation = operationRepository.findOperationByRestaurantIdAndDeletedAtIsNull(restaurantId).orElse(null);
-        OperationRes operationRes = (operation != null) ? OperationRes.of(operation) : null; // NPE 발생 가능성에 따른 삼항 연산자 사용
-        RestaurantRes restaurantRes = RestaurantRes.of(restaurant, operationRes);
+        Operation operation = operationRepository.findOperationByDeletedAtIsNull().orElse(null);
+        RestaurantRes restaurantRes = RestaurantRes.of(restaurant);
 
         // Response
         return restaurantRes;
@@ -104,11 +101,17 @@ public class RestaurantService {
         // Business Logic
         List<RestaurantRes> restaurantRes = new ArrayList<>();
         List<Object[]> restaurantList = restaurantRepository.findRestaurantWithOperationByMemberId(id).orElse(null);
-        for(Object[] objects : restaurantList) {
-            OperationRes operationRes = OperationRes.of(new Operation((Long) objects[10], (Restaurant) objects[11], (LocalTime) objects[12], (LocalTime) objects[13], (LocalTime) objects[14], (LocalTime) objects[15], (LocalTime) objects[16], (LocalTime) objects[17], (LocalTime) objects[18], (LocalTime) objects[19], (LocalTime) objects[20], (LocalTime) objects[21], (LocalTime) objects[22], (LocalTime) objects[23], (LocalTime) objects[23], (LocalTime) objects[24]));
-        }
 
         // Response
         return restaurantRes;
+    }
+
+    public Slice<RestaurantRes> getAll(Long cursor, Pageable pageable) {
+        // Validation
+
+        // Business Logic
+
+        // Response
+        return null;
     }
 }
