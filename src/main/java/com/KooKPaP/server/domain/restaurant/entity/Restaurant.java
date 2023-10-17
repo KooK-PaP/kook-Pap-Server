@@ -23,8 +23,12 @@ public class Restaurant extends BaseTimeEntity {
     @Column(name = "id", nullable = false, columnDefinition = "bigint")
     private Long id;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "operation_id", referencedColumnName = "id")
+    private Operation operation;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", referencedColumnName = "id")
     private Member member;
 
     @Column(name = "name", nullable = false)
@@ -46,9 +50,10 @@ public class Restaurant extends BaseTimeEntity {
         this.introduction = restaurantReq.getIntroduction();
     }
 
-                       @Builder
-    public Restaurant(Long id, Member member, String name, String address, String callNumber, String introduction) {
+   @Builder
+    public Restaurant(Long id, Operation operation, Member member, String name, String address, String callNumber, String introduction) {
         this.id = id;
+        this.operation = operation;
         this.member = member;
         this.name = name;
         this.address = address;
