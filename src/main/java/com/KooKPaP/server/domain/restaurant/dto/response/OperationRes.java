@@ -2,7 +2,6 @@ package com.KooKPaP.server.domain.restaurant.dto.response;
 
 import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
 
@@ -41,18 +40,18 @@ public class OperationRes {
         OperationRes operationRes = new OperationRes();
         operationRes.monOpen = operation.getMonOpen();
         operationRes.monClose = operation.getMonClose();
-        operationRes.tueOpen = operation.getMonClose();
-        operationRes.tueClose = operation.getMonClose();
-        operationRes.wedOpen = operation.getMonClose();
-        operationRes.wedClose = operation.getMonClose();
-        operationRes.thuOpen = operation.getMonClose();
-        operationRes.thuClose = operation.getMonClose();
-        operationRes.friOpen = operation.getMonClose();
-        operationRes.friClose = operation.getMonClose();
-        operationRes.satOpen = operation.getMonClose();
-        operationRes.satClose = operation.getMonClose();
-        operationRes.sunOpen = operation.getMonClose();
-        operationRes.sunClose = operation.getMonClose();
+        operationRes.tueOpen = operation.getTueOpen();
+        operationRes.tueClose = operation.getTueClose();
+        operationRes.wedOpen = operation.getWedOpen();
+        operationRes.wedClose = operation.getWedClose();
+        operationRes.thuOpen = operation.getThuOpen();
+        operationRes.thuClose = operation.getThuClose();
+        operationRes.friOpen = operation.getFriOpen();
+        operationRes.friClose = operation.getFriClose();
+        operationRes.satOpen = operation.getSatOpen();
+        operationRes.satClose = operation.getSatClose();
+        operationRes.sunOpen = operation.getSunOpen();
+        operationRes.sunClose = operation.getSunClose();
 
         return operationRes;
     }
