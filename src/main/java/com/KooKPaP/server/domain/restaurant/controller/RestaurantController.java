@@ -7,6 +7,9 @@ import com.KooKPaP.server.global.common.dto.ApplicationResponse;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +50,10 @@ public class RestaurantController {
     public ApplicationResponse<List<RestaurantRes>> getMy(@AuthenticationPrincipal PrincipalDetails principalDetails) {
         Long id = principalDetails.getMember().getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.getMy(id));
+    }
+
+    @GetMapping("/v1")
+    public ApplicationResponse<Slice<RestaurantRes>> getAll(@RequestParam(name = "cursor", required = false) Long cursor, @PageableDefault(size = 15, sort = "created_at DESC")Pageable pageable) {
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.getAll(cursor, pageable));
     }
 }
