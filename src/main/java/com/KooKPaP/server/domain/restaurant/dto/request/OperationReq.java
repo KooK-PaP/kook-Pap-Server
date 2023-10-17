@@ -29,6 +29,7 @@ public class OperationReq {
     private LocalTime friClose;
 
     private LocalTime satOpen;
+
     private LocalTime satClose;
 
     private LocalTime sunOpen;
