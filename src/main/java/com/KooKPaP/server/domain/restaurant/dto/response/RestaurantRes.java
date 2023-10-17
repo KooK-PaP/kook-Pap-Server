@@ -21,7 +21,7 @@ public class RestaurantRes {
 
     private OperationRes operation;
 
-    public static RestaurantRes of(Restaurant restaurant, OperationRes operation) {
+    public static RestaurantRes of(Restaurant restaurant) {
         RestaurantRes restaurantRes = new RestaurantRes();
         restaurantRes.id = restaurant.getId();
         restaurantRes.memberId = restaurant.getMember().getId();
@@ -29,7 +29,7 @@ public class RestaurantRes {
         restaurantRes.introduction = restaurant.getIntroduction();
         restaurantRes.callNumber = restaurant.getCallNumber();
         restaurantRes.address = restaurant.getAddress();
-        restaurantRes.operation = operation;
+        restaurantRes.operation = OperationRes.of(restaurant.getOperation());
 
         return restaurantRes;
     }

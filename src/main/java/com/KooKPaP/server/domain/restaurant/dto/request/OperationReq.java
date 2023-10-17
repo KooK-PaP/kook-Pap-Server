@@ -1,13 +1,13 @@
 package com.KooKPaP.server.domain.restaurant.dto.request;
 
 import com.KooKPaP.server.domain.restaurant.entity.Operation;
-import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
 import lombok.Getter;
 
 import java.time.LocalTime;
 
 @Getter
 public class OperationReq {
+
     private LocalTime monOpen;
 
     private LocalTime monClose;
@@ -35,9 +35,8 @@ public class OperationReq {
 
     private LocalTime sunClose;
 
-    public Operation from(Restaurant restaurant) {
+    public Operation from() {
         return Operation.builder()
-                .restaurant(restaurant)
                 .monOpen(this.monOpen)
                 .monClose(this.monClose)
                 .tueOpen(this.tueOpen)
