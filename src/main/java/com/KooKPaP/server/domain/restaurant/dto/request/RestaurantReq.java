@@ -1,6 +1,7 @@
 package com.KooKPaP.server.domain.restaurant.dto.request;
 
 import com.KooKPaP.server.domain.member.entity.Member;
+import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
 import lombok.Getter;
 
@@ -22,9 +23,10 @@ public class RestaurantReq {
     @NotNull
     private OperationReq operation;
 
-    public Restaurant from(Member member) {
+    public Restaurant from(Member member, Operation operation) {
         return Restaurant.builder()
                 .name(this.name)
+                .operation(operation)
                 .member(member)
                 .introduction(this.introduction)
                 .callNumber(this.callNumber)
