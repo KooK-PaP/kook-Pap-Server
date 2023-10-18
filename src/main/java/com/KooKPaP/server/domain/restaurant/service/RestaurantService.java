@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,7 +56,7 @@ public class RestaurantService {
         if(!member.getRole().equals(Role.MANAGER)) {
             throw new CustomException(ErrorCode.AUTH_NOT_ALLOWED_ACCESS);
         }
-        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndDeletedAtIsNull(restaurantId).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
+        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndMemberIdAndDeletedAtIsNull(restaurantId, id).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
         restaurant.update(restaurantReq);
@@ -91,11 +92,17 @@ public class RestaurantService {
     }
 
     public List<RestaurantRes> getMy(Long id) {
-        // Validation: Member에 대한 권한 검증 필요 여부 판단
+        // Validation
+        Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.AUTH_MEMBER_NOT_FOUND));
+        if(!member.getRole().equals(Role.MANAGER)) {
+            throw new CustomException(ErrorCode.AUTH_NOT_ALLOWED_ACCESS);
+        }
 
         // Business Logic
-        List<RestaurantRes> restaurantRes = new ArrayList<>();
-        List<Object[]> restaurantList = restaurantRepository.findRestaurantWithOperationByMemberId(id).orElse(null);
+        List<Restaurant> restaurantList = restaurantRepository.findAllByMemberIdAndDeletedAtIsNull(id);
+        List<RestaurantRes> restaurantRes = restaurantList.stream()
+                .map(RestaurantRes::of)
+                .collect(Collectors.toList());
 
         // Response
         return restaurantRes;

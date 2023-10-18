@@ -16,10 +16,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
     Optional<Restaurant> findRestaurantByIdAndDeletedAtIsNull(Long id);
 
     // MANAGER가 소유하고 있는 가게 리스트 모두 조회
-    @Query(value = "select r.id, r.member_id, r.name, r.address, r.call_number, r.introduction, o.id, o.restaurant_id, o.mon_open" +
-            "from restaurant r " +
-            "left join operation o on r.id = o.restaurant_id" +
-            "where r.deleted_at is null",
-            nativeQuery = true)
-    Optional<List<Object[]>> findRestaurantWithOperationByMemberId(Long id);
+    List<Restaurant> findAllByMemberIdAndDeletedAtIsNull(Long memberId);
 }
