@@ -69,13 +69,11 @@ public class RestaurantService {
     @Transactional
     public Void delete(Long id, Long restaurantId) {
         // Validation
-        if(restaurantRepository.existsRestaurantByIdAndMemberIdAndDeletedAtIsNull(restaurantId, id).equals(Boolean.FALSE)) {
-            throw new CustomException(ErrorCode.RESTAURANT_NOT_FOUND);
-        }
+        Restaurant restaurant = restaurantRepository.findRestaurantByIdAndMemberIdAndDeletedAtIsNull(restaurantId, id).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
         // Business Logic
-        restaurantRepository.deleteById(restaurantId);
-        //operationRepository.deleteByRestaurantId(restaurantId);
+        restaurantRepository.delete(restaurant);
+        operationRepository.delete(restaurant.getOperation());
 
         // Response
         return null;
