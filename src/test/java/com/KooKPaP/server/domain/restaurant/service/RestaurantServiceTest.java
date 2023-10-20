@@ -7,6 +7,7 @@ import com.KooKPaP.server.domain.member.repository.MemberRepository;
 import com.KooKPaP.server.domain.restaurant.dto.request.OperationReq;
 import com.KooKPaP.server.domain.restaurant.dto.request.RestaurantReq;
 import com.KooKPaP.server.domain.restaurant.dto.response.RestaurantRes;
+import com.KooKPaP.server.domain.restaurant.repository.OperationRepository;
 import com.KooKPaP.server.domain.restaurant.repository.RestaurantRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,23 +16,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalTime;
 
-@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class RestaurantServiceTest {
 
-    @Autowired
     private final PasswordEncoder passwordEncoder;
     @InjectMocks
     private RestaurantService restaurantService;
 
     @Mock
     private RestaurantRepository restaurantRepository;
+
+    @Mock
+    private OperationRepository operationRepository;
 
     @Mock
     private MemberRepository memberRepository;
@@ -41,7 +42,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    @DisplayName("가게/운영시간 정보를 받아 가게/운영시간 정보를 생성한다.")
+    @DisplayName("가게 등록 성공")
     public void registerSuccessCase() {
         // given
         Member member = createMember();
@@ -49,7 +50,10 @@ class RestaurantServiceTest {
         RestaurantReq restaurantReq = createRestaurantReqDto(operationReq);
 
         // when
-        RestaurantRes restaurantRes = restaurantService.register(member.getId(), restaurantReq);
+        Member saveMember = memberRepository.save(member);
+        System.out.println("Test");
+        RestaurantRes restaurantRes = restaurantService.register(saveMember.getId(), restaurantReq);
+        System.out.println(restaurantRes.toString());
 
         // then
         Assertions.assertThat(restaurantRes).isNotNull();
@@ -57,7 +61,7 @@ class RestaurantServiceTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("가게 등록 실패")
     public void registerFailCase() {
         // given
         RestaurantReq restaurantReq = createRestaurantReqDto(null);
