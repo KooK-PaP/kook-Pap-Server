@@ -3,12 +3,14 @@ package com.KooKPaP.server.domain.restaurant.dto.request;
 import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @Getter
+@Builder
 public class RestaurantReq {
 
     @NotEmpty(message = "가게 이름이 공란입니다.")

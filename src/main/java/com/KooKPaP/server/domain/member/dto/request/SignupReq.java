@@ -1,12 +1,14 @@
 package com.KooKPaP.server.domain.member.dto.request;
 
 import com.KooKPaP.server.domain.member.entity.Role;
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Pattern;
 
 
 @Getter
+@Builder
 public class SignupReq {
 
     private String name;
