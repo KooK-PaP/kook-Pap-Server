@@ -17,7 +17,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,14 +38,11 @@ public class RestaurantService {
         }
 
         // Business Logic: 레스토랑/운영시간 저장
-        Operation operation = restaurantReq.getOperation().from();
-        operationRepository.save(operation);
-        Restaurant restaurant = restaurantReq.from(member, operation);
-        restaurantRepository.save(restaurant);
+        Operation operation = operationRepository.save(restaurantReq.getOperation().from());
+        Restaurant restaurant = restaurantRepository.save(restaurantReq.from(member, operation));
 
         // Response
-        RestaurantRes restaurantRes = RestaurantRes.of(restaurant);
-        return restaurantRes;
+        return RestaurantRes.of(restaurant);
     }
 
     @Transactional
@@ -68,7 +64,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public Void delete(Long id, Long restaurantId) {
+    public void delete(Long id, Long restaurantId) {
         // Validation
         Restaurant restaurant = restaurantRepository.findRestaurantByIdAndMemberIdAndDeletedAtIsNull(restaurantId, id).orElseThrow(() -> new CustomException(ErrorCode.RESTAURANT_NOT_FOUND));
 
@@ -77,7 +73,6 @@ public class RestaurantService {
         operationRepository.delete(restaurant.getOperation());
 
         // Response
-        return null;
     }
 
     public RestaurantRes getOne(Long restaurantId) {

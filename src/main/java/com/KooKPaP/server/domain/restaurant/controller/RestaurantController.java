@@ -40,7 +40,8 @@ public class RestaurantController {
     @DeleteMapping("/v{version}/restaurant/delete/{restaurant_id}")
     public ApplicationResponse<Void> delete(@PathVariable("version") Long version, @AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("restaurant_id") Long restaurantId) {
         Long memberId = principalDetails.getMember().getId();
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.delete(memberId, restaurantId));
+        restaurantService.delete(memberId, restaurantId);
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK);
     }
 
     @GetMapping("/v{version}/restaurant/{restaurant_id}")
