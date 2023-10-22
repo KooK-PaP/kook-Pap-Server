@@ -31,8 +31,8 @@ public class RestaurantService {
     private final OperationRepository operationRepository;
 
     @Transactional
-    public RestaurantRes register(Long id, RestaurantReq restaurantReq) {
-        // Validation: 사용자 정보가 MANAGER인지 확인
+    public RestaurantRes register(Long version, Long id, RestaurantReq restaurantReq) {
+        // Validation: 사용자 정보가 MANAGER인지 확인 (Controller에서 반영)
         Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.AUTH_MEMBER_NOT_FOUND));
         if(!member.getRole().equals(Role.MANAGER)) {
             throw new CustomException(ErrorCode.AUTH_NOT_ALLOWED_ACCESS);
@@ -50,7 +50,7 @@ public class RestaurantService {
     }
 
     @Transactional
-    public RestaurantRes update(Long id, Long restaurantId, RestaurantReq restaurantReq) {
+    public RestaurantRes update(Long version, Long id, Long restaurantId, RestaurantReq restaurantReq) {
         // Validation: 사용자 정보가 MANAGER인지 확인
         Member member = memberRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.AUTH_MEMBER_NOT_FOUND));
         if(!member.getRole().equals(Role.MANAGER)) {
