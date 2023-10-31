@@ -1,5 +1,6 @@
 package com.KooKPaP.server.domain.restaurant.entity;
 
+import com.KooKPaP.server.domain.restaurant.dto.request.OperationReq;
 import com.KooKPaP.server.global.common.BaseTimeEntity;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import java.time.LocalTime;
 
 @Getter
 @Entity
@@ -21,58 +23,70 @@ public class Operation extends BaseTimeEntity {
     @Column(name = "id", nullable = false, columnDefinition = "bigint")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurant;
-
     @Column(name = "mon_open")
-    private String monOpen;
+    private LocalTime monOpen;
 
     @Column(name = "mon_close")
-    private String monClose;
+    private LocalTime monClose;
 
     @Column(name = "tue_open")
-    private String tueOpen;
+    private LocalTime tueOpen;
 
     @Column(name = "tue_close")
-    private String tueClose;
+    private LocalTime tueClose;
 
     @Column(name = "wed_open")
-    private String wedOpen;
+    private LocalTime wedOpen;
 
     @Column(name = "wed_close")
-    private String wedClose;
+    private LocalTime wedClose;
 
     @Column(name = "thu_open")
-    private String thuOpen;
+    private LocalTime thuOpen;
 
     @Column(name = "thu_close")
-    private String thuClose;
+    private LocalTime thuClose;
 
     @Column(name = "fri_open")
-    private String friOpen;
+    private LocalTime friOpen;
 
     @Column(name = "fri_close")
-    private String friClose;
+    private LocalTime friClose;
 
     @Column(name = "sat_open")
-    private String satOpen;
+    private LocalTime satOpen;
 
     @Column(name = "sat_close")
-    private String satClose;
+    private LocalTime satClose;
 
     @Column(name = "sun_open")
-    private String sunOpen;
+    private LocalTime sunOpen;
 
     @Column(name = "sun_close")
-    private String sunClose;
+    private LocalTime sunClose;
+
+    public void update(OperationReq operationReq) {
+        this.monOpen = operationReq.getMonOpen();
+        this.monClose = operationReq.getMonClose();
+        this.tueOpen = operationReq.getTueOpen();
+        this.tueClose = operationReq.getTueClose();
+        this.wedOpen = operationReq.getWedOpen();
+        this.wedClose = operationReq.getWedClose();
+        this.thuOpen = operationReq.getThuOpen();
+        this.thuClose = operationReq.getThuClose();
+        this.friOpen = operationReq.getFriOpen();
+        this.friClose = operationReq.getFriClose();
+        this.satOpen = operationReq.getSatOpen();
+        this.satClose = operationReq.getSatClose();
+        this.sunOpen = operationReq.getSunOpen();
+        this.sunClose = operationReq.getSunClose();
+    }
 
     @Builder
-    public Operation(Long id, Restaurant restaurant, String monOpen, String monClose, String tueOpen,
-                     String tueClose, String wedOpen, String wedClose, String thuOpen, String thuClose,
-                     String friOpen, String friClose, String satOpen, String satClose, String sunOpen, String sunClose) {
+    public Operation(Long id, LocalTime monOpen, LocalTime monClose, LocalTime tueOpen,
+                     LocalTime tueClose, LocalTime wedOpen, LocalTime wedClose, LocalTime thuOpen, LocalTime thuClose,
+                     LocalTime friOpen, LocalTime friClose, LocalTime satOpen, LocalTime satClose, LocalTime sunOpen, LocalTime sunClose) {
         this.id = id;
-        this.restaurant = restaurant;
         this.monOpen = monOpen;
         this.monClose = monClose;
         this.tueOpen = tueOpen;

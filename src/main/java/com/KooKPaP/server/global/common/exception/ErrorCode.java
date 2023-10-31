@@ -40,6 +40,7 @@ public enum ErrorCode {
     // Menu 관련 (4000번대)
 
     // restaurant 관련 (5000번대)
+    RESTAURANT_NOT_FOUND(HttpStatus.NOT_FOUND, "가게를 찾을 수 없습니다", 5000),
 
     // review 관련 (6000번대)
 

@@ -22,7 +22,17 @@ public class ApplicationResponse<T> {
         this.object = object;
     }
 
+    public ApplicationResponse(ErrorCode errorCode) {
+        this.status = errorCode.getHttpStatus().value();
+        this.message = errorCode.getMessage();
+        this.code = errorCode.getCode();
+    }
+
     public static <T> ApplicationResponse<T> ok(ErrorCode errorCode, T object) {
         return  new ApplicationResponse<>(errorCode,object);
+    }
+
+    public static <T> ApplicationResponse<T> ok(ErrorCode errorCode) {
+        return new ApplicationResponse<>(errorCode);
     }
 }

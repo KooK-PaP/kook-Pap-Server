@@ -44,6 +44,7 @@ public class SecurityConfig {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll() // pre-flight 용
                 .antMatchers("/auth/logout", "/auth/withdrawal", "/auth/me", "/auth/update", "/auth/update/email", "/auth/password").authenticated()
+                .antMatchers("/api/restaurant/v1/register", "api/restaurant/v1/update", "api/restaurant/v1/delete/**", "api/restaurant/v1/my").authenticated() // Restaurant 도메인 중 로그인이 필요한 API endpoint
                 .antMatchers().hasAnyRole("MANAGER")
                 .anyRequest().permitAll()
 
