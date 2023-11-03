@@ -38,6 +38,7 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.", 3001),
 
     // Menu 관련 (4000번대)
+    BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "가게를 찾을 수 없습니다", 4000),
 
     // restaurant 관련 (5000번대)
     RESTAURANT_NOT_FOUND(HttpStatus.NOT_FOUND, "가게를 찾을 수 없습니다", 5000),
@@ -50,4 +51,7 @@ public enum ErrorCode {
     private final HttpStatus httpStatus;
     private final String message;
     private final int code;
+
+    //order 관련 (8000번대)
+
 }
