@@ -70,7 +70,7 @@ public class OrderController {
     @GetMapping("/rejectOrder/{bucket_id}")
     public ApplicationResponse<?> rejectOrder(@AuthenticationPrincipal PrincipalDetails principalDetails,@PathVariable("bucket_id") Long bucketId){
         Long id = principalDetails.getMember().getId();
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, orderService.rejectOrder(id, bucketId));
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK);
     }
 
     //주문 확인
@@ -78,6 +78,6 @@ public class OrderController {
     @PostMapping("/acceptOrder/{bucket_id}")
     public ApplicationResponse<?> acceptOrder(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("bucket_id") Long bucketId){
         Long id = principalDetails.getMember().getId();
-        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, orderService.acceptOrder(id, bucketId));
+        return ApplicationResponse.ok(ErrorCode.SUCCESS_OK);
     }
 }

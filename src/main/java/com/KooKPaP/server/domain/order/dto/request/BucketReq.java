@@ -19,9 +19,6 @@ public class BucketReq {
     private Member member;
     private BucketState state = BucketState.AWAITING_ACCEPT; //처음에는 접수 대기중으로 처리
 
-    @NotNull
-    private PurchaseReq purchaseReq;
-
     public Bucket from(Member member) {
         return Bucket.builder()
                 .member(member)

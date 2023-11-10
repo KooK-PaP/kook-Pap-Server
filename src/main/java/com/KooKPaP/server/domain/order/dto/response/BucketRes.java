@@ -15,14 +15,14 @@ public class BucketRes {
     private Member member;
     private BucketState state;
 
-    private PurchaseRes purchaseRes;
+    private PurchaseRes purchase;
 
-    public static BucketRes of(Bucket bucket, PurchaseRes purchaseRes){
+    public static BucketRes of(Bucket bucket){
         BucketRes bucketRes = new BucketRes();
         bucketRes.member = bucket.getMember();
         bucketRes.restaurant = bucket.getRestaurant();
         bucketRes.state = bucket.getState();
-        bucketRes.purchaseRes = purchaseRes;
+        bucketRes.purchase = PurchaseRes.of(bucket.getPurchase());
         return bucketRes;
     }
 }

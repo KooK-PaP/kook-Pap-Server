@@ -11,7 +11,7 @@ public class PurchaseRes {
 
     public static PurchaseRes of(Purchase purchase) {
         PurchaseRes purchaseRes = new PurchaseRes();
-        purchaseRes.bucket =purchase.getBucket();
+        purchaseRes.bucket = purchase.getBucket();
         purchaseRes.count = purchase.getCount();
         purchaseRes.name = purchase.getName();
         return purchaseRes;

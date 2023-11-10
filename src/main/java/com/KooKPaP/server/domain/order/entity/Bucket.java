@@ -1,6 +1,7 @@
 package com.KooKPaP.server.domain.order.entity;
 
 import com.KooKPaP.server.domain.member.entity.Member;
+import com.KooKPaP.server.domain.restaurant.entity.Operation;
 import com.KooKPaP.server.domain.restaurant.entity.Restaurant;
 import com.KooKPaP.server.global.common.BaseTimeEntity;
 import lombok.AccessLevel;
@@ -37,6 +38,10 @@ public class Bucket extends BaseTimeEntity {
     @Column(name = "total_price", nullable = false)
     private Integer totalPrice;         // 주문 총 금액
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "purchase_id", referencedColumnName = "id")
+    private Purchase purchase;
+
     @Builder
     public Bucket(Long id, Member member, Restaurant restaurant, BucketState state, Integer totalPrice) {
         this.id = id;
@@ -44,5 +49,9 @@ public class Bucket extends BaseTimeEntity {
         this.restaurant = restaurant;
         this.state = state;
         this.totalPrice = totalPrice;
+    }
+
+    public void updateState(BucketState newState) {
+        this.state = newState;
     }
 }

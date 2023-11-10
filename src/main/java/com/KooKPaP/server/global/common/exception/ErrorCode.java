@@ -36,6 +36,8 @@ public enum ErrorCode {
 
     // Member 관련 (3000번대)
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.", 3001),
+    PURCHASE_FAILED(HttpStatus.NOT_FOUND, "구매에 실패하였습니다", 3002),
+    INVALID_BUCKET_STATE(HttpStatus.NOT_FOUND,"버켓이 없습니다",3003),
 
     // Menu 관련 (4000번대)
     BUCKET_NOT_FOUND(HttpStatus.NOT_FOUND, "가게를 찾을 수 없습니다", 4000),
