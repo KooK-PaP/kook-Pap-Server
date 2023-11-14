@@ -32,6 +32,7 @@ public enum ErrorCode {
     AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER(HttpStatus.BAD_REQUEST, "카카오로 회원가입하신 사용자는 사용할 수 없는 기능입니다.", 2018),
     AUTH_WRONG_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 일치하지 않습니다.", 2019),
     AUTH_NOT_ALLOWED_ACCESS(HttpStatus.BAD_REQUEST, "잘못된 접근입니다.", 2020),
+    JWT_INVALID_REFRESHTOKEN(HttpStatus.BAD_REQUEST,"잘못된 RTK입니다.",2021),
 
 
     // Member 관련 (3000번대)

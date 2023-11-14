@@ -13,6 +13,7 @@ import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.jwt.PrincipalDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class MemberController {
 
     @GetMapping("/me")
     public ApplicationResponse<MemberInfoRes> getMyInfo(@AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long id = principalDetails.getMember().getId();
+        Long id = principalDetails.getId();
         MemberInfoRes memberInfoRes = commonAuthService.getMemberInfo(id);
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, memberInfoRes);
@@ -36,7 +37,7 @@ public class MemberController {
     @PutMapping("/update")
     public ApplicationResponse<MemberInfoRes> memberUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                            @RequestBody MemberUpdateReq memberUpdateReq) {
-        Long id = principalDetails.getMember().getId();
+        Long id = principalDetails.getId();
         commonAuthService.updateMember(id, memberUpdateReq);
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, commonAuthService.getMemberInfo(id));
@@ -45,7 +46,7 @@ public class MemberController {
     @PatchMapping("/update/email")
     public ApplicationResponse<MemberInfoRes> memberEmailUpdate(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                                 @RequestBody EmailReq emailReq) {
-        Long id = principalDetails.getMember().getId();
+        Long id = principalDetails.getId();
         String newEmail = emailReq.getEmail();
 
         if(!generalAuthService.isDuplicatedEmail(emailReq.getEmail()))
@@ -57,10 +58,10 @@ public class MemberController {
     @PostMapping("/password")
     public ApplicationResponse<?> verifyPassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                  @RequestBody PasswordReq passwordReq) {
-        if (principalDetails.getMember().getType()!= LoginType.GENERAL)
+        if (principalDetails.getType()!= LoginType.GENERAL)
             throw new CustomException(ErrorCode.AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER);
 
-        Long id = principalDetails.getMember().getId();
+        Long id = principalDetails.getId();
         commonAuthService.verifyPassword(id, passwordReq.getPassword());
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);
@@ -69,10 +70,10 @@ public class MemberController {
     @PatchMapping("/password")
     public ApplicationResponse<?> updatePassword(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                                  @RequestBody PasswordReq passwordReq) {
-        if (principalDetails.getMember().getType()!= LoginType.GENERAL)
+        if (principalDetails.getType()!= LoginType.GENERAL)
             throw new CustomException(ErrorCode.AUTH_NOT_ALLOW_FOR_KAKAO_MEMBER);
 
-        Long id = principalDetails.getMember().getId();
+        Long id = principalDetails.getId();
         commonAuthService.updatePassword(id, passwordReq.getPassword());
 
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, null);

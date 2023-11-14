@@ -149,11 +149,10 @@ public class KakaoAuthService {
     public void serviceLogout(PrincipalDetails principalDetails){
         // 서비스 로그아웃(카카오)
         // 카카오 accessToken 만료
-        Member member = principalDetails.getMember();
+        if(principalDetails.getType() != LoginType.KAKAO) return;
 
-        if(member.getType() != LoginType.KAKAO) return;
-
-        OauthToken oauthToken = getOauthToken(member.getId());
+        Long id = principalDetails.getId();
+        OauthToken oauthToken = getOauthToken(id);
         if(oauthToken == null) return;
 
         System.out.println(oauthToken);
@@ -173,7 +172,7 @@ public class KakaoAuthService {
             );
 
             System.out.println("회원번호 " + response.getBody() + " 로그아웃");
-            redisService.deleteValue(member.getId().toString());
+            redisService.deleteValue(id.toString());
 
         } catch (Exception e) {
             return;
