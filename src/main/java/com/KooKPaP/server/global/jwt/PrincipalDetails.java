@@ -1,6 +1,10 @@
 package com.KooKPaP.server.global.jwt;
 
+import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,34 +12,42 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PrincipalDetails implements UserDetails {
-    private Member member;
+    private Long id;
+    private SimpleGrantedAuthority authority;
+    private LoginType type;
 
-    public PrincipalDetails(Member member) {
-        this.member = member;
+
+    public Long getId(){
+        return id;
     }
 
-    public Member getMember(){
-        return member;
+    public LoginType getType(){
+        return type;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 권한 정보 반환
         Collection<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        authorities.add(new SimpleGrantedAuthority(member.getRole().toString()));
+
+        // 각 멤버들은 하나의 권한만 갖도록 설계됨.
+        authorities.add(authority);
 
         return authorities;
     }
 
     @Override
     public String getPassword() {
-        return member.getPassword();
+        return null;
     }
 
     @Override
     public String getUsername() {
-        return member.getName();
+        return null;
     }
 
     @Override

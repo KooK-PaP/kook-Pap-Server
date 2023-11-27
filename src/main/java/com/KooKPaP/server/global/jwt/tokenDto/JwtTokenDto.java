@@ -10,7 +10,7 @@ public class JwtTokenDto {
     private String grantType;
     private String accessToken;
     private String refreshToken;
-    private long accessTokenExpiresIn;
+    private long accessTokenExpiresIn; // 밀리세컨드 단위
 
 
     @Builder

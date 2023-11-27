@@ -27,19 +27,19 @@ public class RestaurantController {
     @Secured("ROLE_ADMIN")
     @PostMapping("/v{version}/restaurant/register")
     public ApplicationResponse<RestaurantRes> register(@PathVariable("version") Long version, @AuthenticationPrincipal PrincipalDetails principalDetails, @Valid @RequestBody RestaurantReq restaurantReq) {
-        Long memberId = principalDetails.getMember().getId();
+        Long memberId = principalDetails.getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_CREATED, restaurantService.register(version, memberId, restaurantReq));
     }
 
     @PutMapping("/v{version}/restaurant/update/{restaurant_id}")
     public ApplicationResponse<RestaurantRes> update(@PathVariable("version") Long version, @AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("restaurant_id") Long restaurantId, @Valid @RequestBody RestaurantReq restaurantReq) {
-        Long memberId = principalDetails.getMember().getId();
+        Long memberId = principalDetails.getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.update(version, memberId, restaurantId, restaurantReq));
     }
 
     @DeleteMapping("/v{version}/restaurant/delete/{restaurant_id}")
     public ApplicationResponse<Void> delete(@PathVariable("version") Long version, @AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable("restaurant_id") Long restaurantId) {
-        Long memberId = principalDetails.getMember().getId();
+        Long memberId = principalDetails.getId();
         restaurantService.delete(memberId, restaurantId);
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK);
     }
@@ -51,7 +51,7 @@ public class RestaurantController {
 
     @GetMapping("/v{version}/restaurant/my")
     public ApplicationResponse<List<RestaurantRes>> getMy(@PathVariable("version") Long version, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        Long memberId = principalDetails.getMember().getId();
+        Long memberId = principalDetails.getId();
         return ApplicationResponse.ok(ErrorCode.SUCCESS_OK, restaurantService.getMy(memberId));
     }
 

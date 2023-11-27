@@ -1,7 +1,7 @@
 package com.KooKPaP.server.global.config;
 
 import com.KooKPaP.server.global.common.service.RedisService;
-import com.KooKPaP.server.global.jwt.JwtFilter;
+import com.KooKPaP.server.global.filter.JwtFilter;
 import com.KooKPaP.server.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

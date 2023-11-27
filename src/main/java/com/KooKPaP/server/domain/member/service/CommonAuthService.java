@@ -30,8 +30,8 @@ public class CommonAuthService {
 
     public JwtTokenDto reissue(String oldRefreshToken) {
         String value = (String) redisService.getValue(oldRefreshToken);
-        System.out.println(oldRefreshToken);
-        System.out.println(value);
+        if(value == null) throw (new CustomException(ErrorCode.JWT_INVALID_REFRESHTOKEN));
+
         if ("Deprecated".equals(value) || !jwtTokenProvider.validateToken(oldRefreshToken)) {
             // refresh 토큰이 블랙리스트에 존재하는지 검사 & 유효성 검사
             throw new CustomException(ErrorCode.AUTH_DEPRECATED_REFRESH_TOKEN);
@@ -55,7 +55,10 @@ public class CommonAuthService {
     }
 
     public void deleteMember(PrincipalDetails principalDetails) {
-        Member member = principalDetails.getMember();
+        Member member = memberRepository.findById(principalDetails.getId()).
+                orElseThrow(
+                        () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
+                );
         memberRepository.delete(member);
     }
 

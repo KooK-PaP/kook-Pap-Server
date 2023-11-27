@@ -1,8 +1,10 @@
-package com.KooKPaP.server.global.jwt;
+package com.KooKPaP.server.global.filter;
 
 import com.KooKPaP.server.global.common.exception.CustomException;
 import com.KooKPaP.server.global.common.exception.ErrorCode;
 import com.KooKPaP.server.global.common.service.RedisService;
+import com.KooKPaP.server.global.jwt.JwtAttribute;
+import com.KooKPaP.server.global.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

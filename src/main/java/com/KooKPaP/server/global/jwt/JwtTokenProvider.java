@@ -1,5 +1,6 @@
 package com.KooKPaP.server.global.jwt;
 
+import com.KooKPaP.server.domain.member.entity.LoginType;
 import com.KooKPaP.server.domain.member.entity.Member;
 import com.KooKPaP.server.domain.member.repository.MemberRepository;
 import com.KooKPaP.server.global.common.exception.CustomException;
@@ -8,10 +9,12 @@ import com.KooKPaP.server.global.jwt.tokenDto.JwtTokenDto;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.*;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import java.util.Date;
 
@@ -35,7 +38,8 @@ public class JwtTokenProvider {
         String accessToken = JWT.create()
                 .withSubject(member.getEmail())                                       // payload "sub": "member.email"
                 .withClaim("id", member.getId())                                // payload "id": "member.id"
-                .withClaim("name", member.getName())                            // payload "name": "member.name"
+                .withClaim("authority", member.getRole().toString())            // payload "authority": "member.role"
+                .withClaim("type", member.getType().toString())                 // payload "type": "member.type"
                 .withExpiresAt(accessTokenExpiresIn)
                 .sign(Algorithm.HMAC256(key));                                        // header "alg": "HS256"
 
@@ -54,13 +58,17 @@ public class JwtTokenProvider {
 
     public Authentication getAuthentication(String accessToken) {
         // Authentication 객체 만들기
-        Long memberId = JWT.require(Algorithm.HMAC256(key)).build().verify(accessToken).getClaim("id").asLong();
+        DecodedJWT claims = JWT.require(Algorithm.HMAC256(key)).build().verify(accessToken);
 
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        );
+        Long memberId = claims.getClaim("id").asLong();
+        String authority = claims.getClaim("authority").asString();
+        LoginType type = claims.getClaim("type").as(LoginType.class);
 
-        PrincipalDetails principalDetails = new PrincipalDetails(member);
+        PrincipalDetails principalDetails = PrincipalDetails.builder()
+                .id(memberId)
+                .authority(new SimpleGrantedAuthority("ROLE_" + authority))
+                .type(type)
+                .build();
 
         return new UsernamePasswordAuthenticationToken(
                 principalDetails,
